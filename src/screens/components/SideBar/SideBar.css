@@ -2,7 +2,9 @@
     width: 40px;
     overflow: hidden;
     
-    background-color: transparent;
+    background-color: var(--light-grey);
+
+    border-left: 1px solid var(--grey);
     
     padding: 12px;
 
@@ -12,7 +14,7 @@
 
 .sideBarExpanded {
     width: 250px;
-    background-color: rgb(241, 241, 241);
+    background-color: var(--light-grey);
 }
 
 .sideBarTopRow {

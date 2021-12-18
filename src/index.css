@@ -6,10 +6,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  --primary-light-light:#c7d2f0;
   --primary-light:#2e5ee0; 
   --primary-dark:#152f95;
   --secondary-light:#45b88a;
   --secondary-dark:#2e6161;
+  --light-grey: rgb(245, 245, 245);
+  --grey: rgb(200, 200, 200);
+  --dark-grey: rgb(140, 140, 140);
 }
 
 code {

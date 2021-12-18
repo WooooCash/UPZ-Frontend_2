@@ -7,7 +7,7 @@
 
     display: flex;
     flex-direction: column;
-    background-color: #00ff00;
+    /* background-color: #00ff00; */
 }
 
 .content-box {
@@ -16,14 +16,29 @@
 
     overflow: hidden;
 
-    background-color: yellow;
+    /* background-color: yellow; */
 }
 
 .content-main {
     flex: 1;
 
-    background-color: orange;
+    /* background-color: orange; */
 
-    justify-content: center;
-    text-align: center;
+    overflow-y: auto;
+
+    padding: 40px;
+}
+
+.guideAddPlan {
+    box-sizing: border-box;
+
+    width: 100%;
+    height: 200px;
+
+    background-color: var(--light-grey);
+
+    border: 1px solid var(--grey);
+    border-radius: 4px;
+
+    padding: 8px;
 }

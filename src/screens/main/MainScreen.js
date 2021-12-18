@@ -10,7 +10,12 @@ export default function MainScreen(props) {
             <NavBar />
             <div className="content-box">
                 <div className="content-main">
-                    MainContent
+                    <div className="guideAddPlan">
+                        Instalator
+                    </div>
+                    <div className="">
+                        TreeView
+                    </div>
                 </div>
                 <SideBar />
             </div>
