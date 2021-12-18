@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Tree.css';
 
-import { faChevronDown, faChevronRight, faExternalLinkAlt, faFolderOpen, faFolder } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faChevronRight, faExternalLinkAlt, faFolderOpen, faFolder, faSplotch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function TreeNode(props) {
@@ -32,9 +32,9 @@ export default function TreeNode(props) {
                 </div>
 
                 <div className="treeNodeIcon" marginRight={10}>
-                    { node.type === 'link' && <FontAwesomeIcon icon={faExternalLinkAlt} /> }
-                    { node.type === 'category' && node.isOpen === true && <FontAwesomeIcon icon={faFolderOpen} /> }
-                    { node.type === 'category' && !node.isOpen === true && <FontAwesomeIcon icon={faFolder} /> }
+                    { node.type === 'put "schedule" here to have an icon' && <FontAwesomeIcon icon={faExternalLinkAlt} /> }
+                    { node.type === 'put "category" here to have an icon' && node.isOpen === true && <FontAwesomeIcon icon={faFolderOpen} /> }
+                    { node.type === 'put "category" here to have an icon' && !node.isOpen === true && <FontAwesomeIcon icon={faFolder} /> }
                 </div>
 
                 <span role="button">
