@@ -10,7 +10,7 @@ export default function MainScreen(props) {
             <NavBar />
             <div className="content-box">
                 <div className="content-main">
-                    skjfdkajsndfkjna
+                    MainContent
                 </div>
                 <SideBar />
             </div>

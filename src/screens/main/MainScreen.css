@@ -16,11 +16,14 @@
 
     overflow: hidden;
 
-    background-color: orange;
+    background-color: yellow;
 }
 
 .content-main {
     flex: 1;
 
     background-color: orange;
+
+    justify-content: center;
+    text-align: center;
 }

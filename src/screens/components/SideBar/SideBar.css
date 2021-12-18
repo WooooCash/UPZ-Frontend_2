@@ -1,5 +1,5 @@
 .sideBar {
-    width: 250px;
+    width: 40px;
     overflow: hidden;
     
     background-color: transparent;
@@ -7,13 +7,12 @@
     padding: 12px;
 
     transition-duration: 150ms;
-    transition-property: background-color, transform;
-    transform: translate(210px, 0px);
+    transition-property: background-color, width;
 }
 
 .sideBarExpanded {
+    width: 250px;
     background-color: rgb(241, 241, 241);
-    transform: none;
 }
 
 .sideBarTopRow {
@@ -32,9 +31,13 @@
     margin-bottom: auto;
 
     white-space: nowrap;
+
+    user-select: none;
 }
 
 .sideBarButton {
+    box-sizing: border-box;
+
     width: 40px;
     height: 40px;
 
