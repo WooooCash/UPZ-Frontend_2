@@ -32,8 +32,30 @@
 .guideAddPlan {
     box-sizing: border-box;
 
+    display: flex;
+    flex-direction: column;
+
     width: 100%;
-    height: 200px;
+    height: 700px;
+
+    /* background-color: var(--light-grey); */
+
+    /* border: 1px solid var(--grey); */
+    /* border-radius: 4px; */
+
+    padding: 8px;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.plansTreeView {
+    box-sizing: border-box;
+
+    width: 100%;
+    height: 500px;
+
+    margin-top: 20px;
 
     background-color: var(--light-grey);
 

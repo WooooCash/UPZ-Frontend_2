@@ -11,9 +11,9 @@ export default function MainScreen(props) {
             <div className="content-box">
                 <div className="content-main">
                     <div className="guideAddPlan">
-                        Instalator
+                        
                     </div>
-                    <div className="">
+                    <div className="plansTreeView">
                         TreeView
                     </div>
                 </div>
