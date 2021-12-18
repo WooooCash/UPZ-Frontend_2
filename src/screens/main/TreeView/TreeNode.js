@@ -1,0 +1,52 @@
+import React from 'react';
+
+import { faChevronDown, faChevronRight, faExternalLinkAlt, faFolderOpen, faFolder } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+export default function TreeNode(props) {
+    const { node, getChildNodes, onToggle, level } = props;
+
+    const getNodeLabel = (node) => {
+        const subdivs = node.path.split('/');
+        return subdivs[subdivs.length - 1];
+    }
+
+    const toggleOpen = () => {
+        node.isOpen = !node.isOpen;
+        onToggle(node);
+    }
+
+    const getPaddingLeft = (level, type) => {
+        let paddingLeft = level * 20;
+        if (type === 'link') paddingLeft += 20;
+        return paddingLeft;
+    }
+
+    return(
+        <React.Fragment>
+            <div level={level} type={node.type} onClick={toggleOpen} style={{paddingLeft: getPaddingLeft(level, node.type)+'px'}}>
+                <div>
+                    { node.type === 'category' && (node.isOpen ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronRight} />) }
+                </div>
+
+                <div marginRight={10}>
+                    { node.type === 'link' && <FontAwesomeIcon icon={faExternalLinkAlt} /> }
+                    { node.type === 'category' && node.isOpen === true && <FontAwesomeIcon icon={faFolderOpen} /> }
+                    { node.type === 'category' && !node.isOpen === true && <FontAwesomeIcon icon={faFolder} /> }
+                </div>
+
+                <span role="button">
+                    { getNodeLabel(node) }
+                </span>
+            </div>
+
+            { node.isOpen && getChildNodes(node).map(childNode => (
+                <TreeNode
+                    {...props}
+                    node={childNode}
+                    level={level+1}
+                />
+            ))}
+        </React.Fragment>
+    )
+}

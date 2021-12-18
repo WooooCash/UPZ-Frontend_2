@@ -3,6 +3,7 @@ import React from "react";
 
 import NavBar from "./../components/NavBar/NavBar"
 import SideBar from "./../components/SideBar/SideBar";
+import Tree from "./TreeView/Tree";
 
 export default function MainScreen(props) {
     return (
@@ -15,6 +16,7 @@ export default function MainScreen(props) {
                     </div>
                     <div className="plansTreeView">
                         TreeView
+                        <Tree />
                     </div>
                 </div>
                 <SideBar />

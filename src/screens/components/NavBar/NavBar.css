@@ -1,7 +1,7 @@
 .navbar {
     display: flex;
-    background-color: rgb(241, 241, 241);
-    border: 1px solid var(--primary-dark);
+    background-color: var(--light-grey);
+    border: 1px solid var(--grey);
     justify-content: center;
 }
 
@@ -26,13 +26,15 @@
     border: 1px solid var(--primary-light);
     border-radius: 20px;
 
+    user-select: none;
+
     transition: 0.25s;
     transition-property: box-shadow, color;
 }
 
 .navbar-button:hover, .navbar-button:focus {
     box-shadow: inset -8.5em 0 0 0 var(--primary-light);
-    color: white;
+    color: var(--light-grey);
     cursor: pointer;
 }
 
