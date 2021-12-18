@@ -1,0 +1,160 @@
+.guideContainer {
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    height: 700px;
+    width: 100%;
+
+    background-color: var(--primary-light);
+    color: white;
+
+    /* border: 1px solid var(--primary-dark); */
+    border-radius: 4px;
+
+    transition-duration: 150ms;
+    transition-property: height;
+}
+
+.guideContainerCollapsed {
+    height: 42px;
+}
+
+.guideNavBar {
+    display: flex;
+
+    align-items: center;
+}
+
+.guideNavBarClickableRow {
+    flex: 1;
+    display: flex;
+
+    align-items: center;
+
+    padding-top: 8px;
+    padding-left: 14px;
+    padding-bottom: 8px;
+    padding-right: 14px;
+
+    cursor: pointer;
+}
+
+.guideCollapseButton {
+    display: flex;
+
+    width: 25px;
+    height: 25px;
+
+    align-items: center;
+    justify-content: center;
+
+    transform: none;
+
+    /* background-color: blue; */
+
+    transition-duration: 100ms;
+    transition-property: transform;
+}
+
+.guideContainerCollapsed .guideCollapseButton {
+    transform: rotate(180deg);
+}
+
+.guideNavBarButton {
+    display: flex;
+
+    width: 30px;
+    height: 30px;
+
+    margin-left: 6px;
+
+    border: 1px solid white;
+    border-radius: 4px;
+
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    transition-duration: 70ms;
+    transition-property: background-color, color;
+}
+
+.guideNavBarButton:hover {
+    background-color: white;
+    color: var(--primary-light);
+}
+
+.guideNavBarTitle {
+    flex: 1;
+    font-size: 20px;
+
+    user-select: none;
+}
+
+.guideContent{
+    flex: 1;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+
+    /* background-color: var(--light-grey); */
+
+    padding: 8px;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.contentRow {
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: center;
+}
+
+.guideButton {
+    display: flex;
+    flex-direction: column;
+
+    height: 150px;
+    width: 150px;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 20px;
+
+    background-color: transparent;
+
+    border: 1px solid white;
+    border-radius: 4px;
+
+    font-size: 40px;
+    text-align: center;
+
+    cursor: pointer;
+
+    transition-duration: 70ms;
+    transition-property: background-color, color;
+}
+
+.guideButton:hover {
+    background-color: white;
+    color: var(--primary-light);
+}
+
+.guideButtonText {
+    margin-top: 12px;
+
+    font-size: 16px;
+}
+
+.paddingLeft {
+    padding-left: 16px;
+}
