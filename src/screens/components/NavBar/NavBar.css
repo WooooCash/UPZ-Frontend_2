@@ -1,6 +1,6 @@
 .navbar {
     display: flex;
-    background-color: #eeeeff;
+    background-color: rgb(241, 241, 241);
     border: 1px solid var(--primary-dark);
     justify-content: center;
 }
@@ -8,6 +8,7 @@
 .navbar-button {
     background-color: white;
     color: var(--primary-light);
+    display: flex;
     
     width: 150px;
     text-align: center;
@@ -24,10 +25,23 @@
 
     border: 1px solid var(--primary-light);
     border-radius: 20px;
+
+    transition: 0.25s;
+    transition-property: box-shadow, color;
 }
 
-.navbar-button:hover {
-    background-color: var(--primary-light);
+.navbar-button:hover, .navbar-button:focus {
+    box-shadow: inset -8.5em 0 0 0 var(--primary-light);
     color: white;
     cursor: pointer;
+}
+
+.navbar-button-icon {
+    color: var(--primary-light);
+    margin-right: 8px;
+}
+
+.navbar-button-text {
+    flex: 1;
+    text-align: center;
 }
