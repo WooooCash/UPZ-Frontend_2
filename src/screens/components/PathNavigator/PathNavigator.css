@@ -1,0 +1,54 @@
+.pathNavigatorContainer {
+    /* height: 20px; */
+    /* background-color: red; */
+
+    padding-top: 4px;
+    /* padding-left: 12px; */
+    padding-bottom: 4px;
+    /* padding-right: 12px; */
+
+    overflow-x: auto;
+
+    scrollbar-color: var(--primary-light-light) var(--primary-light);
+}
+
+.pathNavigatorContainer::-webkit-scrollbar-track {
+    background: var(--primary-light);
+}
+
+.pathNavigatorContainer::-webkit-scrollbar-track {
+    background: var(--primary-light-light);
+}
+
+.pathNavigatorArrow {
+    display: inline-block;
+
+    margin-left: 4px;
+    margin-right: 4px;
+
+    color: var(--primary-light-light);
+}
+
+.pathNavigatorNode {
+    display: inline-block;
+
+    padding-top: 1px;
+    padding-left: 6px;
+    padding-bottom: 1px;
+    padding-right: 6px;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    background-color: transparent;
+    border-radius: 4px;
+
+    transition-duration: 70ms;
+    transition-property: background-color, color;
+}
+
+.pathNavigatorNode:hover {
+    background-color: white;
+    color: var(--primary-light);
+}
