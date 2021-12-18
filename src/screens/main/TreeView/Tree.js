@@ -27,27 +27,27 @@ const data = {
     'niestacjonarne/informatyka': {
         path: 'niestacjonarne/informatyka',
         type: 'category',
-        children: ['']
+        children: ['niestacjonarne/informatyka/semestr1', 'niestacjonarne/informatyka/semestr2', 'niestacjonarne/informatyka/semestr3']
     },
     'stacjonarne/matematyka': {
         path: 'stacjonarne/matematyka',
         type: 'category',
-        children: ['']
+        children: ['stacjonarne/matematyka/semestr1', 'stacjonarne/matematyka/semestr2', 'stacjonarne/matematyka/semestr3']
     },
     'niestacjonarne/matematyka': {
         path: 'niestacjonarne/matematyka',
         type: 'category',
-        children: ['']
+        children: ['niestacjonarne/matematyka/semestr1', 'niestacjonarne/matematyka/semestr2', 'niestacjonarne/matematyka/semestr3']
     },
     'stacjonarne/architektura': {
         path: 'stacjonarne/architektura',
         type: 'category',
-        children: ['']
+        children: ['stacjonarne/architektura/semestr1', 'stacjonarne/architektura/semestr2', 'stacjonarne/architektura/semestr3']
     },
     'niestacjonarne/architektura': {
         path: 'niestacjonarne/architektura',
         type: 'category',
-        children: ['']
+        children: ['niestacjonarne/architektura/semestr1', 'niestacjonarne/architektura/semestr2', 'niestacjonarne/architektura/semestr3']
     },
     'stacjonarne/informatyka/semestr1': {
         path: 'stacjonarne/informatyka/semestr1',
@@ -61,6 +61,81 @@ const data = {
     },
     'stacjonarne/informatyka/semestr3': {
         path: 'stacjonarne/informatyka/semestr3',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'niestacjonarne/informatyka/semestr1': {
+        path: 'niestacjonarne/informatyka/semestr1',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'niestacjonarne/informatyka/semestr2': {
+        path: 'niestacjonarne/informatyka/semestr2',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'niestacjonarne/informatyka/semestr3': {
+        path: 'niestacjonarne/informatyka/semestr3',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'stacjonarne/matematyka/semestr1': {
+        path: 'stacjonarne/matematyka/semestr1',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'stacjonarne/matematyka/semestr2': {
+        path: 'stacjonarne/matematyka/semestr2',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'stacjonarne/matematyka/semestr3': {
+        path: 'stacjonarne/matematyka/semestr3',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'niestacjonarne/matematyka/semestr1': {
+        path: 'niestacjonarne/matematyka/semestr1',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'niestacjonarne/matematyka/semestr2': {
+        path: 'niestacjonarne/matematyka/semestr2',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'niestacjonarne/matematyka/semestr3': {
+        path: 'niestacjonarne/matematyka/semestr3',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'stacjonarne/architektura/semestr1': {
+        path: 'stacjonarne/architektura/semestr1',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'stacjonarne/architektura/semestr2': {
+        path: 'stacjonarne/architektura/semestr2',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'stacjonarne/architektura/semestr3': {
+        path: 'stacjonarne/architektura/semestr3',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'niestacjonarne/architektura/semestr1': {
+        path: 'niestacjonarne/architektura/semestr1',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'niestacjonarne/architektura/semestr2': {
+        path: 'niestacjonarne/architektura/semestr2',
+        type: 'schedule',
+        link: 'somelink'
+    },
+    'niestacjonarne/architektura/semestr3': {
+        path: 'niestacjonarne/architektura/semestr3',
         type: 'schedule',
         link: 'somelink'
     }
@@ -80,16 +155,13 @@ export default function Tree() {
     }
 
     const onToggle = (node) => {
-
         let tempNodes = { ...nodes };
         tempNodes[node.path].isOpen = node.isOpen;
-        console.log('isOpen', tempNodes[node.path].isOpen)
         setNodes(tempNodes);
-        
     }
 
     return(
-        <div>
+        <div className="treeContainer">
             {getRootNodes().map(node => (
                 <TreeNode
                     node={node}

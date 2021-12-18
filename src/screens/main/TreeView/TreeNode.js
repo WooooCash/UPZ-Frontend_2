@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './Tree.css';
+
 import { faChevronDown, faChevronRight, faExternalLinkAlt, faFolderOpen, faFolder } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -17,19 +19,19 @@ export default function TreeNode(props) {
     }
 
     const getPaddingLeft = (level, type) => {
-        let paddingLeft = level * 20;
+        let paddingLeft = level * 40;
         if (type === 'link') paddingLeft += 20;
         return paddingLeft;
     }
 
     return(
         <React.Fragment>
-            <div level={level} type={node.type} onClick={toggleOpen} style={{paddingLeft: getPaddingLeft(level, node.type)+'px'}}>
+            <div className="treeNode" level={level} type={node.type} onClick={toggleOpen} style={{marginLeft: getPaddingLeft(level, node.type)+'px', paddingLeft: 15 +'px'}}>
                 <div>
                     { node.type === 'category' && (node.isOpen ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronRight} />) }
                 </div>
 
-                <div marginRight={10}>
+                <div className="treeNodeIcon" marginRight={10}>
                     { node.type === 'link' && <FontAwesomeIcon icon={faExternalLinkAlt} /> }
                     { node.type === 'category' && node.isOpen === true && <FontAwesomeIcon icon={faFolderOpen} /> }
                     { node.type === 'category' && !node.isOpen === true && <FontAwesomeIcon icon={faFolder} /> }
