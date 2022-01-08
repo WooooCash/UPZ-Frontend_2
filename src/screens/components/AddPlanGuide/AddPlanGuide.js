@@ -2,19 +2,22 @@ import "./AddPlanGuide.css";
 import React, { useState } from "react";
 import PathNavigator from "../PathNavigator/PathNavigator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faChevronUp, faSquareRootAlt, faLaptopCode, faFunnelDollar } from "@fortawesome/free-solid-svg-icons";
+import { faBuilding, faMapMarkerAlt, faArrowLeft, faChevronUp, faSquareRootAlt, faLaptopCode, faFunnelDollar } from "@fortawesome/free-solid-svg-icons";
 
 export default function AddPlanGuide(props) {
 
     const [collapsed, setCollapsed] = useState(false);
     const [screenNumber, setScreenNumber] = useState(0);
-    const [degree, setDegree] = useState(-1);
+
+    const [locality, setLocality] = useState(-1);
+    const [field, setField] = useState(-1);
     const [semester, setSemester] = useState(-1);
 
-    const degreeNames = ["Informatyka", "Informatyka i ekonometria", "Matematyka stosowana"];
+    const localityNames = ["Stacjonarne", "Niestacjonarne"];
+    const fieldNames = ["Informatyka", "Informatyka i ekonometria", "Matematyka stosowana"];
     const semesterNames = ["Semestr 1.", "Semestr 2.", "Semestr 3.", "Semestr 4.", "Semestr 5.", "Semestr 6.", "Semestr 7."]
 
-    const screenTitles = ["Wybierz kierunek", 'Wybierz semestr'];
+    const screenTitles = ["Wybierz rodzaj studiów", "Wybierz kierunek", 'Wybierz semestr'];
 
     function getScreenTitle() {
         if (screenNumber > screenTitles.length - 1 || screenNumber < 0) return "Unknown";
@@ -29,14 +32,19 @@ export default function AddPlanGuide(props) {
         }
     }
 
-    function selectDegree(id) {
-        setDegree(id);
+    function selectLocality(id) {
+        setLocality(id);
         setScreenNumber(1);
+    }
+
+    function selectField(id) {
+        setField(id);
+        setScreenNumber(2);
     }
 
     function selectSemester(id) {
         setSemester(id)
-        setScreenNumber(2);
+        setScreenNumber(3);
     }
 
     function goBackAScreen() {
@@ -48,12 +56,16 @@ export default function AddPlanGuide(props) {
     function getNodesForPathNavigator() {
         return [
             {
-                "name": (degree > -1 && degree < degreeNames.length) ? degreeNames[degree] : "??",
+                "name": (locality > -1 && locality < localityNames.length) ? localityNames[locality] : "??",
                 "onClick": () => setScreenNumber(0)
             },
             {
-                "name": (semester > -1 && semester < semesterNames.length) ? semesterNames[semester] : "??",
+                "name": (field > -1 && field < fieldNames.length) ? fieldNames[field] : "??",
                 "onClick": () => setScreenNumber(1)
+            },
+            {
+                "name": (semester > -1 && semester < semesterNames.length) ? semesterNames[semester] : "??",
+                "onClick": () => setScreenNumber(2)
             }
         ]
     }
@@ -84,61 +96,93 @@ export default function AddPlanGuide(props) {
             {!collapsed &&
                 <div className="guideContent">
                     {screenNumber == 0 && 
-                        <div>
-                            <div className="contentRow">
-                                <div className="guideButton" onClick={() => selectDegree(0)}>
-                                    <FontAwesomeIcon icon={faLaptopCode} />
-                                    <div className="guideButtonText">Informatyka</div>
-                                </div>
-                                <div className="guideButton" onClick={() => selectDegree(1)}>
-                                    <FontAwesomeIcon icon={faFunnelDollar} />
-                                    <div className="guideButtonText">Informatyka i ekonometria</div>
-                                </div>
-                                <div className="guideButton" onClick={() => selectDegree(2)}>
-                                    <FontAwesomeIcon icon={faSquareRootAlt}/>
-                                    <div className="guideButtonText">Matematyka stosowana</div>
-                                </div>
-                            </div>
-                        </div>
+                        <_SelectLocalityScreen onSelect={(id) => selectLocality(id)}/>
                     }
                     {screenNumber == 1 && 
-                        <div>
-                            <div className="contentRow">
-                                <div className="guideButton" onClick={() => selectSemester(0)}>
-                                    I
-                                    <div className="guideButtonText">Semestr 1.</div>
-                                </div>
-                                <div className="guideButton" onClick={() => selectSemester(1)}>
-                                    II
-                                    <div className="guideButtonText">Semestr 2.</div>
-                                </div>
-                                <div className="guideButton" onClick={() => selectSemester(2)}>
-                                    III
-                                    <div className="guideButtonText">Semestr 3.</div>
-                                </div>
-                                <div className="guideButton" onClick={() => selectSemester(3)}>
-                                    IV
-                                    <div className="guideButtonText">Semestr 4.</div>
-                                </div>
-                            </div>
-                            <div className="contentRow">
-                                <div className="guideButton" onClick={() => selectSemester(4)}>
-                                    V
-                                    <div className="guideButtonText">Semestr 5.</div>
-                                </div>
-                                <div className="guideButton" onClick={() => selectSemester(5)}>
-                                    VI
-                                    <div className="guideButtonText">Semestr 6.</div>
-                                </div>
-                                <div className="guideButton" onClick={() => selectSemester(6)}>
-                                    VII
-                                    <div className="guideButtonText">Semestr 7.</div>
-                                </div>
-                            </div>
-                        </div>
+                        <_SelectFieldScreen onSelect={(id) => selectField(id)} />
+                    }
+                    {screenNumber == 2 && 
+                        <_SelectSemesterScreen onSelect={(id) => selectSemester(id)} />
                     }
                 </div>
             }
+        </div>
+    );
+}
+
+function _SelectLocalityScreen(props) {
+    return (
+        <div>
+            <div className="contentRow">
+                <div className="guideButton" onClick={() => props.onSelect(0)}>
+                    <FontAwesomeIcon icon={faBuilding} />
+                    <div className="guideButtonText">Stacjonarne</div>
+                </div>
+                <div className="guideButton" onClick={() => props.onSelect(1)}>
+                    <FontAwesomeIcon icon={faMapMarkerAlt} />
+                    <div className="guideButtonText">Niestacjonarne</div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function _SelectFieldScreen(props) {
+    return (
+        <div>
+            <div className="contentRow">
+                <div className="guideButton" onClick={() => props.onSelect(0)}>
+                    <FontAwesomeIcon icon={faLaptopCode} />
+                    <div className="guideButtonText">Informatyka</div>
+                </div>
+                <div className="guideButton" onClick={() => props.onSelect(1)}>
+                    <FontAwesomeIcon icon={faFunnelDollar} />
+                    <div className="guideButtonText">Informatyka i ekonometria</div>
+                </div>
+                <div className="guideButton" onClick={() => props.onSelect(2)}>
+                    <FontAwesomeIcon icon={faSquareRootAlt}/>
+                    <div className="guideButtonText">Matematyka stosowana</div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function _SelectSemesterScreen(props) {
+    return (
+        <div>
+            <div className="contentRow">
+                <div className="guideButton" onClick={() => props.onSelect(0)}>
+                    I
+                    <div className="guideButtonText">Semestr 1.</div>
+                </div>
+                <div className="guideButton" onClick={() => props.onSelect(1)}>
+                    II
+                    <div className="guideButtonText">Semestr 2.</div>
+                </div>
+                <div className="guideButton" onClick={() => props.onSelect(2)}>
+                    III
+                    <div className="guideButtonText">Semestr 3.</div>
+                </div>
+                <div className="guideButton" onClick={() => props.onSelect(3)}>
+                    IV
+                    <div className="guideButtonText">Semestr 4.</div>
+                </div>
+            </div>
+            <div className="contentRow">
+                <div className="guideButton" onClick={() => props.onSelect(4)}>
+                    V
+                    <div className="guideButtonText">Semestr 5.</div>
+                </div>
+                <div className="guideButton" onClick={() => props.onSelect(5)}>
+                    VI
+                    <div className="guideButtonText">Semestr 6.</div>
+                </div>
+                <div className="guideButton" onClick={() => props.onSelect(6)}>
+                    VII
+                    <div className="guideButtonText">Semestr 7.</div>
+                </div>
+            </div>
         </div>
     );
 }
