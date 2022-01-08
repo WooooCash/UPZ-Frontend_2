@@ -1,10 +1,11 @@
 import React, {useState} from "react";
+import "./Consultations.css"
 
 
 const profs = {
     "Imie Nazwisko": 1,
-    "jsfkl djsfklsdf": 2,
-    "fjidjsf fsjakdlf": 3
+    "Imie2 Nazwisko2": 2,
+    "Imie3 Nazwisko3": 3
 }
 
 const schedules = {
@@ -56,7 +57,42 @@ const schedules = {
         }
     },
     3: {
-
+        "Mon": {
+            "8.00": {
+                "type": 1,
+                "name": "konsultacje",
+                "duration": 1
+            },
+            "10:15": {
+                "type": 0,
+                "name": "SM",
+                "duration": 3
+            }
+        },
+        "Tue": {
+            "12.45": {
+                "type": 1,
+                "name": "konsultacje",
+                "duration": 1
+            },
+            "15.30": {
+                "type": 0,
+                "name": "ZTP",
+                "duration": 2
+            }
+        },
+        "Wed": {
+            "9.15": {
+                "type": 1,
+                "name": "konsultacje",
+                "duration": 1
+            },
+            "15.30": {
+                "type": 1,
+                "name": "konsultacje",
+                "duration": 1
+            }
+        }
     }
 }
 
@@ -70,24 +106,30 @@ export default function Conultations(props) {
 
     return(
         <div>
-            <label for="profs">Wybierz profesora</label>
-            <select name="profs" id="profs" onChange={switchProf}>
-                    <option value="0">--Select--</option>
-                {Object.entries(profs).map((prof) => (
-                    <option value={prof[1]}>{prof[0]}</option>
-                ))}
-            </select>
-            <hr/>
+            <div className="select-form">
+                <label className="select-form-element">Wybierz profesora</label>
+                <br />
+                <select className="select-form-element" name="profs" id="profs" onChange={switchProf}>
+                        <option value="0" selected disabled>--Select--</option>
+                    {Object.entries(profs).map((prof) => (
+                        <option value={prof[1]}>{prof[0]}</option>
+                    ))}
+                </select>
+            </div>
+
             <div className="schedule-view">
-                Schedule View
-                <hr />
+                {!schedules[currentProf] && (<p>Nothing to see here B)</p>)}
                 {schedules[currentProf] && Object.entries(schedules[currentProf]).map((day) => (
                     <div>
                         <h3>{day[0]}</h3>
                         {Object.entries(schedules[currentProf][day[0]]).map((hour) => (
-                            <div>
+                            <div style={{marginLeft: "40px"}}>
                                 <h4>{hour[0]}</h4>
-                                <p>{schedules[currentProf][day[0]][hour[0]].name}</p>
+                                <div style={{marginLeft: "20px"}}>
+                                    <p>name: {schedules[currentProf][day[0]][hour[0]].name}</p>
+                                    <p>type: {schedules[currentProf][day[0]][hour[0]].type}</p>
+                                    <p>duration (blocks): {schedules[currentProf][day[0]][hour[0]].duration}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
