@@ -1,0 +1,50 @@
+.column {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.content-box {
+    flex: 1;
+    display: flex;
+
+    overflow: hidden;
+}
+
+.content-main {
+    flex: 1;
+
+    overflow-y: scroll;
+    scrollbar-color: var(--primary-light-light) var(--light-grey);
+
+    padding: 40px;
+}
+
+.content-main::-webkit-scrollbar-track {
+    background: var(--light-grey);
+}
+
+.content-main::-webkit-scrollbar-track {
+    background: var(--primary-light-light);
+}
+
+.schedule-view {
+    box-sizing: border-box;
+
+    width: 100%;
+    min-height: 500px;
+
+    margin-top: 20px;
+
+    background-color: var(--light-grey);
+
+    border: 1px solid var(--grey);
+    border-radius: 4px;
+
+    padding: 8px;
+}

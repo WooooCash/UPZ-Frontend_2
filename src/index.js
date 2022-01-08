@@ -2,11 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import MainScreen from "./screens/main/MainScreen.js";
+import ConsultationsScreen from './screens/consultations/ConsultationsScreen';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <MainScreen />
+    <ConsultationsScreen />
   </React.StrictMode>,
   document.getElementById('root')
 );
