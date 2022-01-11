@@ -107,9 +107,9 @@ export default function Conultations(props) {
     return(
         <div>
             <div className="select-form">
-                <label className="select-form-element">Wybierz profesora</label>
+                <label>Wybierz profesora</label>
                 <br />
-                <select className="select-form-element" name="profs" id="profs" onChange={switchProf}>
+                <select name="profs" id="profs" onChange={switchProf}>
                         <option value="0" selected disabled>--Select--</option>
                     {Object.entries(profs).map((prof) => (
                         <option value={prof[1]}>{prof[0]}</option>
