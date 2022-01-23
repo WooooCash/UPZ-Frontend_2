@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import TreeNode from './TreeNode';
+import getTreeStructure from "../../../util/api";
 
 const data = {
     'rozkłady': {
@@ -144,6 +145,12 @@ const data = {
 export default function Tree() {
 
     const [nodes, setNodes] = useState(data);
+
+    useEffect(() => {
+        let data = getTreeStructure();
+        console.log("data", data);
+    })
+
 
     const getRootNodes = () => {
         return Object.values(nodes).filter(node => node.isRoot === true);
