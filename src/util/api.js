@@ -7,12 +7,11 @@ export default function getTreeStructure(){
         method:'post',
         data:{
             query: `query {
-                fetchNotes{
-                body,
-                title,
-                id,
-                updatedAt,
-                createdAt
+                fetchJsonType{
+                path,
+                isRoot,
+                type,
+                children
             }
             }`
         },
