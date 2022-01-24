@@ -144,12 +144,20 @@ const data = {
 
 export default function Tree() {
 
-    const [nodes, setNodes] = useState(data);
+    const [nodes, setNodes] = useState({});
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        let data = getTreeStructure();
-        console.log("data", data);
-    })
+        let jsonArr = getTreeStructure().then(result => {
+            let tempData = {}
+            for(let node of result.fetchJsonType) {
+                tempData[node.path] = node;
+            }
+            console.log(tempData)
+            setNodes(tempData);
+            setLoading(false)
+        });
+    }, [])
 
 
     const getRootNodes = () => {
@@ -158,7 +166,13 @@ export default function Tree() {
 
     const getChildNodes = (node) => {
         if (!node.children) return [];
-        return node.children.map(path => nodes[path]);
+
+        let existingNodes = []
+        for (let path of node.children) {
+            if (typeof(nodes[path]) !== "undefined")
+                existingNodes.push(nodes[path]);
+        }
+        return existingNodes;
     }
 
     const onToggle = (node) => {
@@ -169,7 +183,8 @@ export default function Tree() {
 
     return(
         <div className="treeContainer">
-            {getRootNodes().map(node => (
+            {loading && <p>loading...</p>}
+            {!loading && getRootNodes().map(node => (
                 <TreeNode
                     node={node}
                     level={0}
