@@ -1,23 +1,247 @@
 import "./AddPlanGuide.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PathNavigator from "../PathNavigator/PathNavigator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBuilding, faMapMarkerAlt, faArrowLeft, faChevronUp, faSquareRootAlt, faLaptopCode, faFunnelDollar } from "@fortawesome/free-solid-svg-icons";
+import { faBuilding, faMapMarkerAlt, faArrowLeft, faChevronUp, faSquareRootAlt, faLaptopCode, faFunnelDollar, faAsterisk } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 export default function AddPlanGuide(props) {
 
     const [collapsed, setCollapsed] = useState(false);
     const [screenNumber, setScreenNumber] = useState(0);
 
-    const [locality, setLocality] = useState(-1);
-    const [field, setField] = useState(-1);
-    const [semester, setSemester] = useState(-1);
+    const [locality, setLocality] = useState('');
+    const [field, setField] = useState('');
+    const [degree, setDegree] = useState('');
+    const [speciality, setSpeciality] = useState('');
+    const [semester, setSemester] = useState('');
 
-    const localityNames = ["Stacjonarne", "Niestacjonarne"];
-    const fieldNames = ["Informatyka", "Informatyka i ekonometria", "Matematyka stosowana"];
+    const [studies, setStudies] = useState([]);
+    const [specialities, setSpecialities] = useState([]);
+
+    const [studySpecialities, setStudySpecialities] = useState({});
+    const [studySemesters, setStudySemesters] = useState({});
+
+    const localities = [
+        {
+            "id": "stac.",
+            "name": "Stacjonarne",
+            "image": <FontAwesomeIcon icon={faBuilding} />
+        },
+        {
+            "id": "niest.",
+            "name": "Niestacjonarne",
+            "image": <FontAwesomeIcon icon={faMapMarkerAlt} />
+        },
+        {
+            "id": "other",
+            "name": "Inne",
+            "image": <FontAwesomeIcon icon={faAsterisk} />
+        },
+    ];
+
+    const fields = [
+        {
+            "id": "informatyka",
+            "name": "Informatyka",
+            "image": <FontAwesomeIcon icon={faLaptopCode} />
+        },
+        {
+            "id": "mat. stos.",
+            "name": "Matematyka stosowana",
+            "image": <FontAwesomeIcon icon={faSquareRootAlt} />
+        },
+        {
+            "id": "inf. i ekon.",
+            "name": "Informatyka i ekonometria",
+            "image": <FontAwesomeIcon icon={faFunnelDollar} />
+        },
+        {
+            "id": "other",
+            "name": "Inne",
+            "image": <FontAwesomeIcon icon={faAsterisk} />
+        },
+    ]
+
+    const degrees = [
+        {
+            "id": "I",
+            "name": "Stopień 1.",
+            "image": "I"
+        },
+        {
+            "id": "II",
+            "name": "Stopień 2.",
+            "image": "II"
+        },
+        {
+            "id": "III",
+            "name": "Stopień 3.",
+            "image": "III"
+        },
+        {
+            "id": "other",
+            "name": "Inne",
+            "image": <FontAwesomeIcon icon={faAsterisk} />
+        },
+    ]
+
     const semesterNames = ["Semestr 1.", "Semestr 2.", "Semestr 3.", "Semestr 4.", "Semestr 5.", "Semestr 6.", "Semestr 7."]
 
-    const screenTitles = ["Wybierz rodzaj studiów", "Wybierz kierunek", 'Wybierz semestr'];
+    const [semesters, setSemesters] = useState([]);
+
+    const screenTitles = ["Wybierz rodzaj studiów", "Wybierz kierunek", 'Wybierz stopień', 'Wybierz specjalizację', 'Wybierz semestr'];
+
+    useEffect(() => {
+        console.log('effect');
+        axios({url:"https://upz-graphql.herokuapp.com/graphql",
+            method:'post',
+            data:{
+                query: `query {
+                    fetchPlans{
+                        studyId,
+                        specialityId,
+                        semester,
+                    }
+                }`
+            },
+            headers:{
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+        }).then(response =>{
+
+            let newStudySpecialities = {};
+            response.data.data.fetchPlans.forEach(plan => {
+                if (!newStudySpecialities[Number.parseInt(plan.studyId)]) {
+                    newStudySpecialities[Number.parseInt(plan.studyId)] = new Set();
+                }
+                newStudySpecialities[Number.parseInt(plan.studyId)].add(plan.specialityId);
+            });
+            setStudySpecialities(newStudySpecialities);
+
+            let newStudySemesters = {};
+            response.data.data.fetchPlans.forEach(plan => {
+                if (!newStudySemesters[Number.parseInt(plan.studyId)]) {
+                    newStudySemesters[Number.parseInt(plan.studyId)] = new Set();
+                }
+                newStudySemesters[Number.parseInt(plan.studyId)].add(plan.semester);
+            });
+            setStudySemesters(newStudySemesters);
+
+            let studyIds = new Set();
+            response.data.data.fetchPlans.map((plan) => plan.studyId).forEach(id => {
+                if (id != null && id != '' && id != 'null') {
+                    studyIds.add(id);
+                }
+            });
+
+            if (studyIds.size > 0) {
+                axios({url:"https://upz-graphql.herokuapp.com/graphql",
+                    method:'post',
+                    data:{
+                        query: `query {
+                            fetchStudies{
+                                id,
+                                name
+                            }
+                        }`
+                    },
+                    headers:{
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                }).then(response =>{
+                    // let studies = new Set();
+                    // response.data.data.fetchStudies.forEach((study) => {
+                    //     if (studyIds.has(Number.parseInt(study.id))) {
+                    //         studies.add(study.name);
+                    //     } 
+                    // })
+                    // console.log(studies);
+
+                    // sparsowanie dostępnych studiów
+                    let newStudies = [];
+                    for (let study of response.data.data.fetchStudies) {
+                        let newEntry = {
+                            "id": Number.parseInt(study.id),
+                            "locality": "other",
+                            "field": "other",
+                            "degree": "other",
+                            "original": ""
+                        };
+                        newEntry.original = study.name;
+                        // ustalenie stacjonarności
+                        if (/stac\./.test(study.name)) {
+                            newEntry.locality = 'stac.';
+                        } else if (/niest\./.test(study.name)) {
+                            newEntry.locality = 'niest.';
+                        } 
+                        //ustalenie kierunku
+                        try {
+                            let field = (/kier\.\s*(.*)$/g).exec(study.name)[1];
+                            newEntry.field = field;
+                        } catch {
+                            console.log('study deos not have a field')
+                        }
+                        // ustalenie stopnia
+                        try {
+                            let degree = (/(I{1,3})\s?st\./).exec(study.name)[1];
+                            newEntry.degree = degree;
+                        } catch {
+                            console.log('study does not have a degree')
+                        }
+                        newStudies.push(newEntry);
+                        console.log(newEntry);
+                    }
+                    setStudies(newStudies);
+                });
+            }
+
+            let specialityIds = new Set();
+            response.data.data.fetchPlans.map((plan) => plan.specialityId).forEach(id => {
+                if (id != null && id != '' && id != 'null') {
+                    specialityIds.add(id);
+                }
+            });
+
+            if (specialityIds.size > 0) {
+                axios({url:"https://upz-graphql.herokuapp.com/graphql",
+                    method:'post',
+                    data:{
+                        query: `query {
+                            fetchSpecialities{
+                                id,
+                                name
+                            }
+                        }`
+                    },
+                    headers:{
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                }).then(response2 =>{
+                    let specialities = new Set();
+                    response2.data.data.fetchSpecialities.forEach((speciality) => {
+                        if (specialityIds.has(Number.parseInt(speciality.id))) {
+                            specialities.add(speciality.name);
+                        } 
+                    });
+                    let newSpecialities = [];
+                    for (let speciality of specialities) {
+                        let newEntry = {
+                            "id": Number.parseInt(speciality),
+                            "name": speciality.name ?? '',
+                        };
+                        newSpecialities.push(newEntry);
+                    }
+                    console.log('specialities', specialities);
+                    console.log('studySpeciality', studySpecialities);
+                    setSpecialities(newSpecialities);
+                });
+            }
+        });
+    }, []);
 
     function getScreenTitle() {
         if (screenNumber > screenTitles.length - 1 || screenNumber < 0) return "Unknown";
@@ -42,6 +266,22 @@ export default function AddPlanGuide(props) {
         setScreenNumber(2);
     }
 
+    function selectDegree(id) {
+        let selectedStudy = studies.find(s => (s.locality == locality && s.field == field && s.degree == id));
+        if (selectedStudy) {
+            let specialities = [...(studySpecialities[selectedStudy.id] ?? [])]?.filter(s => s != 0);
+            console.log(specialities);
+            if (specialities.length > 0) {
+                setScreenNumber(3);
+                return;
+            }
+        }
+        setDegree(id);
+        setSpeciality('');
+        updateVisibleSemesters();
+        setScreenNumber(4);
+    }
+
     function selectSemester(id) {
         setSemester(id)
         setScreenNumber(3);
@@ -53,21 +293,66 @@ export default function AddPlanGuide(props) {
         } 
     }
 
-    function getNodesForPathNavigator() {
-        return [
-            {
-                "name": (locality > -1 && locality < localityNames.length) ? localityNames[locality] : "??",
-                "onClick": () => setScreenNumber(0)
-            },
-            {
-                "name": (field > -1 && field < fieldNames.length) ? fieldNames[field] : "??",
-                "onClick": () => setScreenNumber(1)
-            },
-            {
-                "name": (semester > -1 && semester < semesterNames.length) ? semesterNames[semester] : "??",
-                "onClick": () => setScreenNumber(2)
+    function updateVisibleSemesters() {
+        let selectedStudy = studies.find(s => (s.locality == locality && s.field == field && s.degree == degree));
+        if (selectedStudy) {
+            let semesters = [...studySemesters[selectedStudy.id]]?.filter(s => s != 0);
+            let newSemesters = [];
+            for (let semester of semesters) {
+                newSemesters.push({
+                    "id": semester,
+                    "name": "Semestr " + semester + '.',
+                    "image": semester
+                });
             }
-        ]
+            setSemester(semesters);
+        }
+    }
+
+    function getNodesForPathNavigator() {
+        let nodes = [];
+        if (locality != '') {
+            nodes.push(
+                {
+                    "name": localities?.find(l => l.id == locality)?.name ?? "??",
+                    "onClick": () => setScreenNumber(0)
+                }
+            );
+        }
+        if (field != '') {
+            nodes.push(
+                {
+                    "name": fields?.find(f => f.id == field)?.name ?? "??",
+                    "onClick": () => setScreenNumber(1)
+                }
+            );
+        }
+        if (speciality != '') {
+            nodes.push(
+                {
+                    "name": specialities?.find(s => s.id == speciality)?.name ?? "??",
+                    "onClick": () => setScreenNumber(2)
+                }
+            );
+        }
+        if (degree != '') {
+            nodes.push(
+                {
+                    "name": degrees?.find(deg => deg.id == degree)?.name ?? "??",
+                    "onClick": () => setScreenNumber(3 - (degree ? 1 : 0))
+                }
+            );
+        }
+        if (semester != '') {
+            nodes.push(
+                {
+                    "name": semesterNames?.find(s => s.id == semester)?.name ?? "??",
+                    "onClick": () => setScreenNumber(4)
+                }
+            );
+        }
+
+        return nodes;
     }
 
     return (
@@ -90,22 +375,45 @@ export default function AddPlanGuide(props) {
             } */}
             {!collapsed && 
                 <div className="paddingLeft">
-                    <PathNavigator nodes={getNodesForPathNavigator()} activeNodesCount={screenNumber}/>
+                    <PathNavigator nodes={getNodesForPathNavigator().slice(0, screenNumber)} />
                 </div>
             }
             {!collapsed &&
                 <div className="guideContent">
                     {screenNumber == 0 && 
-                        <_SelectLocalityScreen onSelect={(id) => selectLocality(id)}/>
+                        <_AddPlanGuideScreen options={localities.filter(l => studies.findIndex(s => s.locality == l.id) >= 0)} onSelect={(id) => selectLocality(id)}/>
                     }
                     {screenNumber == 1 && 
-                        <_SelectFieldScreen onSelect={(id) => selectField(id)} />
+                        <_AddPlanGuideScreen options={fields.filter(fi => studies.findIndex(s => (s.locality == locality && s.field == fi.id)) >= 0)} onSelect={(id) => selectField(id)} />
                     }
                     {screenNumber == 2 && 
-                        <_SelectSemesterScreen onSelect={(id) => selectSemester(id)} />
+                        <_AddPlanGuideScreen options={degrees.filter(deg => studies.findIndex(s => (s.locality == locality && s.field == field && s.degree == deg.id)) >= 0)} onSelect={(id) => selectDegree(id)} />
+                    }
+                    {screenNumber == 4 &&
+                        <_AddPlanGuideScreen options={semesters} onSelect={(id) => selectSemester(id)} />
                     }
                 </div>
             }
+        </div>
+    );
+}
+
+function _AddPlanGuideScreen(props) {
+
+    let buttons = [];
+
+    for (let option of props.options) {
+        buttons.push(
+            <div key={option.id} className="guideButton" onClick={() => props?.onSelect(option.id)}>
+                {option.image}
+                <div className="guideButtonText">{option.name}</div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="contentRow">
+            { buttons }
         </div>
     );
 }
@@ -121,6 +429,10 @@ function _SelectLocalityScreen(props) {
                 <div className="guideButton" onClick={() => props.onSelect(1)}>
                     <FontAwesomeIcon icon={faMapMarkerAlt} />
                     <div className="guideButtonText">Niestacjonarne</div>
+                </div>
+                <div className="guideButton" onClick={() => props.onSelect(2)}>
+                    <FontAwesomeIcon icon={faAsterisk} />
+                    <div className="guideButtonText">Inne</div>
                 </div>
             </div>
         </div>
@@ -168,8 +480,6 @@ function _SelectSemesterScreen(props) {
                     IV
                     <div className="guideButtonText">Semestr 4.</div>
                 </div>
-            </div>
-            <div className="contentRow">
                 <div className="guideButton" onClick={() => props.onSelect(4)}>
                     V
                     <div className="guideButtonText">Semestr 5.</div>

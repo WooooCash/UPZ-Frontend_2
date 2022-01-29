@@ -7,18 +7,21 @@ export default function PathNavigator(props) {
 
     let nodes = [];
 
-    if (props.nodes && props.activeNodesCount) {
-        for (let i = 0; i < props.activeNodesCount; i++) {
-            if (i > 0) {
+    if (props.nodes) {
+        let isFirstNode = true;
+        for (let node of props.nodes) {
+            if (!isFirstNode) {
                 nodes.push(
                     <div className="pathNavigatorArrow">
                         <FontAwesomeIcon icon={faAngleRight} />
                     </div>
                 );
+            } else {
+                isFirstNode = false;
             }
 
-            nodes.push(<div className="pathNavigatorNode" onClick={() => props.nodes[i].onClick()}>
-                {props.nodes[i].name}
+            nodes.push(<div className="pathNavigatorNode" onClick={() => node.onClick()}>
+                {node.name}
             </div>);
         }
     }
