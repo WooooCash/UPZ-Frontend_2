@@ -15,6 +15,8 @@ export default function TreeNode(props) {
 
     const toggleOpen = () => {
         node.isOpen = !node.isOpen;
+
+
         onToggle(node);
     }
 

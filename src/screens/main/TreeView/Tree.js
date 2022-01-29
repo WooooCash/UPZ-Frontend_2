@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import TreeNode from './TreeNode';
+import getTreeStructure from "../../../util/api";
 
 const data = {
     'rozkłady': {
@@ -143,7 +144,21 @@ const data = {
 
 export default function Tree() {
 
-    const [nodes, setNodes] = useState(data);
+    const [nodes, setNodes] = useState({});
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        let jsonArr = getTreeStructure().then(result => {
+            let tempData = {}
+            for(let node of result.fetchJsonType) {
+                tempData[node.path] = node;
+            }
+            console.log(tempData)
+            setNodes(tempData);
+            setLoading(false)
+        });
+    }, [])
+
 
     const getRootNodes = () => {
         return Object.values(nodes).filter(node => node.isRoot === true);
@@ -151,7 +166,13 @@ export default function Tree() {
 
     const getChildNodes = (node) => {
         if (!node.children) return [];
-        return node.children.map(path => nodes[path]);
+
+        let existingNodes = []
+        for (let path of node.children) {
+            if (typeof(nodes[path]) !== "undefined")
+                existingNodes.push(nodes[path]);
+        }
+        return existingNodes;
     }
 
     const onToggle = (node) => {
@@ -162,7 +183,8 @@ export default function Tree() {
 
     return(
         <div className="treeContainer">
-            {getRootNodes().map(node => (
+            {loading && <p>loading...</p>}
+            {!loading && getRootNodes().map(node => (
                 <TreeNode
                     node={node}
                     level={0}
