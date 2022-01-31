@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default function getTreeStructure(){
+export function getTreeStructure(){
     return axios({url:"https://upz-graphql.herokuapp.com/graphql",
     
         method:'post',
@@ -12,6 +12,53 @@ export default function getTreeStructure(){
                 type,
                 children
             }
+            }`
+        },
+        headers:{
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+    }).then((response) =>{
+        return response.data.data;
+    })
+}
+
+export function getConsultations(){
+    return axios({url:"https://upz-graphql.herokuapp.com/graphql",
+    
+        method:'post',
+        data:{
+            query: `query {
+                fetchTutorships {
+                    id,
+                    teacherId,
+                    description,
+                    day,
+                    hour,
+                }
+            }`
+        },
+        headers:{
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+    }).then((response) =>{
+        return response.data.data;
+    })
+}
+
+export function getTeachers(){
+    return axios({url:"https://upz-graphql.herokuapp.com/graphql",
+    
+        method:'post',
+        data:{
+            query: `query {
+                fetchTeachers {
+                    id,
+                    name,
+                    lastName,
+                    shorterName,
+                }
             }`
         },
         headers:{
