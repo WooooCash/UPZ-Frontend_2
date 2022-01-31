@@ -5,23 +5,23 @@ export default function Schedule() {
     
     return(
         <div className="container">
-
+            <h1>Rozkład</h1>
             <div className="schedule__container">
                 <div className="days__container">
                     <span className="corner"></span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
-                    <span className="time">8.30 <br /> - <br /> 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
+                    <span className="time">8.30 - 9.15</span>
 
                 </div>
                 <div className="part__day">
