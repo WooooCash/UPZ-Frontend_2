@@ -1,0 +1,18 @@
+.planScreenMainContainer {
+    position: absolute;
+
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.planScreenPlanName {
+    font-size: 24px;
+
+    margin-left: 32px;
+    margin-top: 24px;
+}

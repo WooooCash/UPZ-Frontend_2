@@ -1,0 +1,118 @@
+.planWeekViewMainContainer {
+    box-sizing: border-box;
+
+    /* flex: 1; */
+
+    display: flex;
+
+    /* overflow-y: auto; */
+
+    /* margin-top: 32px;
+    margin-left: 32px;
+    margin-right: 32px; */
+    margin: 32px;
+
+    /* padding-bottom: 32px;
+    padding-right: 8px; */
+
+    /* background-color: var(--light-grey); */
+    border-radius: 4px;
+
+    position: relative;
+}
+
+.planWeekViewContent {
+    display: flex;
+    flex-direction: row;
+
+    flex: 1;
+
+    align-items: stretch;
+}
+
+.planWeekViewHoursColumn {
+    position: relative;
+
+    /* width: 100px; */
+
+    /* background-color: rgba(255, 0, 0, 10); */
+
+    /* width: 50px; */
+    /* padding-left: 16px; */
+    padding-right: 16px;
+    padding-bottom: 16px;
+}
+
+.planWeekViewHour {
+    /* position: absolute; */
+    text-align: end;
+    color: var(--dark-grey);
+}
+
+.planWeekViewDays {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+
+    border: 1px solid #aaaaaa;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.planWeekViewDayColumn {
+    flex: 1;
+    /* z-index: 1; */
+
+    position: relative;
+
+    border-right: 1px solid #aaaaaa;
+}
+
+.planWeekViewDayColumn:nth-child(2n) {
+    background-color: #fafafa;
+}
+
+.planWeekViewDayColumn:nth-child(2n-1) {
+    background-color: #f0f0f0;
+}
+
+.planWeekViewDayColumn:last-child {
+    border-right: none;
+}
+
+.horizontalLine {
+    position: absolute;
+    height: 1px;
+    background-color: #aaaaaa;
+    z-index: 2;
+}
+
+.planWeekViewDayHeader {
+    display: flex;
+    
+    width: 100%;
+    background-color: #0002;
+
+    align-items: center;
+    justify-content: center;
+
+}
+
+.eventDisplay {
+    position: absolute;
+
+    box-sizing: border-box;
+
+    /* background-color: var(--grey); */
+    border-radius: 4px;
+
+    top: 100px;
+    left: 0px;
+    right: 0px;
+    height: 40px;
+
+    margin-left: 4px;
+    margin-right: 4px;
+
+    z-index: 4;
+}
