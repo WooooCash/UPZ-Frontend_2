@@ -142,7 +142,7 @@ export default function PlanWeekView(props) {
 
         let eventLengthInMinutes = (eventToHour - eventFromHour) * 60 + (eventToMinute - eventFromMinute);
 
-        let eventStartOffset = ADDITIONAL_TOP_OFFSET + (eventFromHour * 60 + eventFromMinute - FROM_HOUR * 60) / 60 * ROW_HEIGHT;
+        let eventStartOffset = DAY_HEADER_HEIGHT + ADDITIONAL_TOP_OFFSET + (eventFromHour * 60 + eventFromMinute - FROM_HOUR * 60) / 60 * ROW_HEIGHT;
         let eventHeight = eventLengthInMinutes / 60 * ROW_HEIGHT;
 
         return <div className='eventDisplay' style={{top: eventStartOffset, height: eventHeight, backgroundColor:event.color}}>
