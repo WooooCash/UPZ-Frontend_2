@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import TreeNode from './TreeNode';
-import getTreeStructure from "../../../util/api";
+import { getTreeStructure } from "../../../util/api";
 
 const data = {
     'rozkłady': {
@@ -153,7 +153,6 @@ export default function Tree() {
             for(let node of result.fetchJsonType) {
                 tempData[node.path] = node;
             }
-            console.log(tempData)
             setNodes(tempData);
             setLoading(false)
         });

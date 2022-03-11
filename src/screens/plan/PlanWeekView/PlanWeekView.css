@@ -97,6 +97,7 @@
     align-items: center;
     justify-content: center;
 
+    border-bottom: 1px solid #aaaaaa;
 }
 
 .eventDisplay {
@@ -126,7 +127,7 @@
 
 .eventDisplay:hover {
     cursor: pointer;
-    border: 2px solid white;
+    border: 2px dashed red;
     padding-left: 6px;
     padding-right: 6px;
     padding-top: 0px;
