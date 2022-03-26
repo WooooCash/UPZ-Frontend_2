@@ -1,3 +1,4 @@
+import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef } from 'react/cjs/react.production.min';
 import './PlanWeekView.css'
 
@@ -11,19 +12,31 @@ export default function PlanWeekView(props) {
     const FROM_HOUR = 7;
     const TO_HOUR = 22;
 
-    const data = {
-        monday: [{from:'8:30', to:'11:45', color:'#fc851e'}, 
-                    {from:'12:00', to:'13:30', color:'#0f81fc'}, 
-                    {from:'16:00', to:'17:30', color:'#64c954'}],
-        tuesday: [{from:'10:15', to:'11:45', color:'#fc851e'},
-                    {from:'14:00', to:'15:30', color:'#0f81fc'}],
-        wednesday: [{from:'14:00', to:'14:45', color:'#fc851e'}],
-        thursday: [{from:'10:15', to:'11:45', color:'#64c954'}, 
-                    {from:'12:00', to:'13:30', color:'#0f81fc'}],
-        friday: [{from:'8:30', to:'10:00', color:'#fc851e'}],
-        saturday: [],
-        sunday: [],
-    }
+    const events = [
+        {dayNumber: '1', from:'8:30', to:'11:45', color:'#fc851e'}, 
+        {dayNumber: '1', from:'12:00', to:'13:30', color:'#0f81fc'}, 
+        {dayNumber: '1', from:'16:00', to:'17:30', color:'#64c954'},
+        {dayNumber: '2', from:'10:15', to:'11:45', color:'#fc851e'},
+        {dayNumber: '2', from:'14:00', to:'15:30', color:'#0f81fc'},
+        {dayNumber: '3', from:'14:00', to:'14:45', color:'#fc851e'},
+        {dayNumber: '4', from:'10:15', to:'11:45', color:'#64c954'}, 
+        {dayNumber: '4', from:'12:00', to:'13:30', color:'#0f81fc'},
+        {dayNumber: '5', from:'8:30', to:'10:00', color:'#fc851e'},
+    ];
+
+    // const data = {
+    //     monday: [{from:'8:30', to:'11:45', color:'#fc851e'}, 
+    //                 {from:'12:00', to:'13:30', color:'#0f81fc'}, 
+    //                 {from:'16:00', to:'17:30', color:'#64c954'}],
+    //     tuesday: [{from:'10:15', to:'11:45', color:'#fc851e'},
+    //                 {from:'14:00', to:'15:30', color:'#0f81fc'}],
+    //     wednesday: [{from:'14:00', to:'14:45', color:'#fc851e'}],
+    //     thursday: [{from:'10:15', to:'11:45', color:'#64c954'}, 
+    //                 {from:'12:00', to:'13:30', color:'#0f81fc'}],
+    //     friday: [{from:'8:30', to:'10:00', color:'#fc851e'}],
+    //     saturday: [],
+    //     sunday: [],
+    // }
 
     var hoursComponents = [];
     var horizontalLinesComponents = [];
@@ -49,54 +62,69 @@ export default function PlanWeekView(props) {
         )
     }
 
-    var mondayEvents = [];
-    for (let event of data.monday) {
-        mondayEvents.push(
-            generateEventDiv(event)
-        );
+    var eventsByDays = new Map();
+    eventsByDays.set('1', []);
+    eventsByDays.set('2', []);
+    eventsByDays.set('3', []);
+    eventsByDays.set('4', []);
+    eventsByDays.set('5', []);
+    eventsByDays.set('6', []);
+    eventsByDays.set('7', []);
+    
+    for (let event of events) {
+        if (eventsByDays.has(event.dayNumber)) {
+            eventsByDays.get(event.dayNumber).push(generateEventDiv(event));
+        }
     }
 
-    var tuesdayEvents = [];
-    for (let event of data.tuesday) {
-        tuesdayEvents.push(
-            generateEventDiv(event)
-        );
-    }
+    // var mondayEvents = [];
+    // for (let event of data.monday) {
+    //     mondayEvents.push(
+    //         generateEventDiv(event)
+    //     );
+    // }
 
-    var wednesdayEvents = [];
-    for (let event of data.wednesday) {
-        wednesdayEvents.push(
-            generateEventDiv(event)
-        );
-    }
+    // var tuesdayEvents = [];
+    // for (let event of data.tuesday) {
+    //     tuesdayEvents.push(
+    //         generateEventDiv(event)
+    //     );
+    // }
 
-    var thursdayEvents = [];
-    for (let event of data.thursday) {
-        thursdayEvents.push(
-            generateEventDiv(event)
-        );
-    }
+    // var wednesdayEvents = [];
+    // for (let event of data.wednesday) {
+    //     wednesdayEvents.push(
+    //         generateEventDiv(event)
+    //     );
+    // }
 
-    var fridayEvents = [];
-    for (let event of data.friday) {
-        fridayEvents.push(
-            generateEventDiv(event)
-        );
-    }
+    // var thursdayEvents = [];
+    // for (let event of data.thursday) {
+    //     thursdayEvents.push(
+    //         generateEventDiv(event)
+    //     );
+    // }
 
-    var saturdayEvents = [];
-    for (let event of data.saturday) {
-        saturdayEvents.push(
-            generateEventDiv(event)
-        );
-    }
+    // var fridayEvents = [];
+    // for (let event of data.friday) {
+    //     fridayEvents.push(
+    //         generateEventDiv(event)
+    //     );
+    // }
 
-    var sundayEvents = [];
-    for (let event of data.sunday) {
-        sundayEvents.push(
-            generateEventDiv(event)
-        );
-    }
+    // var saturdayEvents = [];
+    // for (let event of data.saturday) {
+    //     saturdayEvents.push(
+    //         generateEventDiv(event)
+    //     );
+    // }
+
+    // var sundayEvents = [];
+    // for (let event of data.sunday) {
+    //     sundayEvents.push(
+    //         generateEventDiv(event)
+    //     );
+    // }
 
     return (
         <div className='planWeekViewMainContainer'>
@@ -107,23 +135,23 @@ export default function PlanWeekView(props) {
                 <div className='planWeekViewDays'>
                     <div className='planWeekViewDayColumn'>
                         <div className='planWeekViewDayHeader' style={{ height: `${DAY_HEADER_HEIGHT}px` }}>Pon.</div>
-                        {mondayEvents}
+                        {eventsByDays.get('1')}
                     </div>
                     <div className='planWeekViewDayColumn'>
                         <div className='planWeekViewDayHeader' style={{ height: `${DAY_HEADER_HEIGHT}px` }}>Wt.</div>
-                        {tuesdayEvents}
+                        {eventsByDays.get('2')}
                     </div>
                     <div className='planWeekViewDayColumn'>
                         <div className='planWeekViewDayHeader' style={{ height: `${DAY_HEADER_HEIGHT}px` }}>Śr.</div>
-                        {wednesdayEvents}
+                        {eventsByDays.get('3')}
                     </div>
                     <div className='planWeekViewDayColumn'>
                         <div className='planWeekViewDayHeader' style={{ height: `${DAY_HEADER_HEIGHT}px` }}>Czw.</div>
-                        {thursdayEvents}
+                        {eventsByDays.get('4')}
                     </div>
                     <div className='planWeekViewDayColumn'>
                         <div className='planWeekViewDayHeader' style={{ height: `${DAY_HEADER_HEIGHT}px` }}>Pt.</div>
-                        {fridayEvents}
+                        {eventsByDays.get('5')}
                     </div>
                 </div>
             </div>

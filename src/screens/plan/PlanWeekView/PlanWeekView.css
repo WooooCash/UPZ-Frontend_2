@@ -123,12 +123,15 @@
     overflow: hidden;
 
     z-index: 4;
+
+    box-shadow: #0005 0px 5px 10px;
+
+    transition-property: box-shadow;
+    transition-duration: 100ms;
 }
 
 .eventDisplay:hover {
     cursor: pointer;
-    border: 2px dashed red;
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-top: 0px;
+
+    box-shadow: #0007 0px 7px 15px;
 }
