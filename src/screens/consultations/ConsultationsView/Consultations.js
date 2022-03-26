@@ -4,12 +4,29 @@ import "./Consultations.css"
 
 
 
+const hours = [
+    ["8.30", "9.15"],
+    ["9.15", "10.00"],
+    ["10.15", " 11.00"],
+    ["11.00", " 11.45"],
+    ["12.00", " 12.45"],
+    ["12.45", " 13.30"],
+    ["14.00", " 14.45"],
+    ["14.45", " 15.30"],
+    ["16.00", " 16.45"],
+    ["16.45", " 17.30"],
+    ["17.40", " 18.25"],
+    ["18.25", " 19.10"],
+    ["19.20", " 20.05"],
+    ["20.05", " 20.50"],
+]
 
 export default function Conultations(props) {
 
     const [consultations, setConsultations] = useState({})
     const [teachers, setTeachers] = useState({})
     const [currentProf, setCurrentProf] = useState(0)
+    const [profName, setProfName] = useState("")
 
 
     useEffect(() => {
@@ -40,7 +57,9 @@ export default function Conultations(props) {
 
     const switchProf = (e) => {
         setCurrentProf(e.target.value)
+        setProfName(e.target.options[e.target.selectedIndex].text)
         console.log("currProf", e.target.value)
+        console.log("profName", e.target.options[e.target.selectedIndex].text)
     }
 
     const showCurrentProfCons = () => {
@@ -70,10 +89,14 @@ export default function Conultations(props) {
                     <div>
                         <h2>Consultation ID: {consId[0]}</h2>
                         <div style={{marginLeft:"40px"}}>
-                            <p>Teacher ID: {consId[1].teacherId}</p>
-                            <p>Day: {consId[1].day}</p>
                             <p>Hour: {consId[1].hour}</p>
-                            <p>Description: {consId[1].description}</p>
+                            <p>From: {hours[consId[1].hour-1][0]}</p>
+                            <p>To: {hours[consId[1].hour-1][1]}</p>
+                            <p>dayNumber: {consId[1].day}</p>
+                            <p>color: green</p>
+                            <p>Teacher ID: {consId[1].teacherId}</p>
+                            <p>person: {profName}</p>
+                            <p>other: {consId[1].description}</p>
                         </div>
                     </div>
                 ))}
