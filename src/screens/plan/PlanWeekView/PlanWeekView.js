@@ -1,5 +1,6 @@
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef } from 'react/cjs/react.production.min';
+import EventTile from './EventDisplay';
 import './PlanWeekView.css'
 
 export default function PlanWeekView(props) {
@@ -13,30 +14,16 @@ export default function PlanWeekView(props) {
     const TO_HOUR = 22;
 
     const events = [
-        {dayNumber: '1', from:'8:30', to:'11:45', color:'#fc851e'}, 
-        {dayNumber: '1', from:'12:00', to:'13:30', color:'#0f81fc'}, 
-        {dayNumber: '1', from:'16:00', to:'17:30', color:'#64c954'},
-        {dayNumber: '2', from:'10:15', to:'11:45', color:'#fc851e'},
-        {dayNumber: '2', from:'14:00', to:'15:30', color:'#0f81fc'},
-        {dayNumber: '3', from:'14:00', to:'14:45', color:'#fc851e'},
-        {dayNumber: '4', from:'10:15', to:'11:45', color:'#64c954'}, 
-        {dayNumber: '4', from:'12:00', to:'13:30', color:'#0f81fc'},
-        {dayNumber: '5', from:'8:30', to:'10:00', color:'#fc851e'},
+        {dayNumber: '1', from:'8:30', to:'11:45', color:'#fc851e', roomNr:'122', name:'BSK', person:'Anna Mazur', parity:'1', other:'Other information about this subject'}, 
+        {dayNumber: '1', from:'12:00', to:'13:30', color:'#0f81fc', fontColor:'white', roomNr:'120', name:'SW'}, 
+        {dayNumber: '1', from:'16:00', to:'17:30', color:'#64c954', roomNr:'202', name:'SW'},
+        {dayNumber: '2', from:'10:15', to:'11:45', color:'#fc851e', roomNr:'32c', name:'Linux'},
+        {dayNumber: '2', from:'14:00', to:'15:30', color:'#0f81fc', fontColor:'white', roomNr:'040', name:'Linux', person:'Jan Kowalski'},
+        {dayNumber: '3', from:'14:00', to:'14:45', color:'#fc851e', roomNr:'WA-12B', name:'Linux', person:'Jan Kowalski'},
+        {dayNumber: '4', from:'10:15', to:'11:45', color:'#64c954', roomNr: 'WA-12B', name: 'BSK'}, 
+        {dayNumber: '4', from:'12:00', to:'13:30', color:'#0f81fc', fontColor:'white', roomNr:'17c', name:'Java', person:'Wojciech Nowak', parity: '2'},
+        {dayNumber: '5', from:'8:30', to:'10:00', color:'#fc851e', roomNr:'124', name:'Java', person:'Wojciech Nowak', other:'Sample description of a subject'},
     ];
-
-    // const data = {
-    //     monday: [{from:'8:30', to:'11:45', color:'#fc851e'}, 
-    //                 {from:'12:00', to:'13:30', color:'#0f81fc'}, 
-    //                 {from:'16:00', to:'17:30', color:'#64c954'}],
-    //     tuesday: [{from:'10:15', to:'11:45', color:'#fc851e'},
-    //                 {from:'14:00', to:'15:30', color:'#0f81fc'}],
-    //     wednesday: [{from:'14:00', to:'14:45', color:'#fc851e'}],
-    //     thursday: [{from:'10:15', to:'11:45', color:'#64c954'}, 
-    //                 {from:'12:00', to:'13:30', color:'#0f81fc'}],
-    //     friday: [{from:'8:30', to:'10:00', color:'#fc851e'}],
-    //     saturday: [],
-    //     sunday: [],
-    // }
 
     var hoursComponents = [];
     var horizontalLinesComponents = [];
@@ -76,55 +63,6 @@ export default function PlanWeekView(props) {
             eventsByDays.get(event.dayNumber).push(generateEventDiv(event));
         }
     }
-
-    // var mondayEvents = [];
-    // for (let event of data.monday) {
-    //     mondayEvents.push(
-    //         generateEventDiv(event)
-    //     );
-    // }
-
-    // var tuesdayEvents = [];
-    // for (let event of data.tuesday) {
-    //     tuesdayEvents.push(
-    //         generateEventDiv(event)
-    //     );
-    // }
-
-    // var wednesdayEvents = [];
-    // for (let event of data.wednesday) {
-    //     wednesdayEvents.push(
-    //         generateEventDiv(event)
-    //     );
-    // }
-
-    // var thursdayEvents = [];
-    // for (let event of data.thursday) {
-    //     thursdayEvents.push(
-    //         generateEventDiv(event)
-    //     );
-    // }
-
-    // var fridayEvents = [];
-    // for (let event of data.friday) {
-    //     fridayEvents.push(
-    //         generateEventDiv(event)
-    //     );
-    // }
-
-    // var saturdayEvents = [];
-    // for (let event of data.saturday) {
-    //     saturdayEvents.push(
-    //         generateEventDiv(event)
-    //     );
-    // }
-
-    // var sundayEvents = [];
-    // for (let event of data.sunday) {
-    //     sundayEvents.push(
-    //         generateEventDiv(event)
-    //     );
-    // }
 
     return (
         <div className='planWeekViewMainContainer'>
@@ -173,8 +111,6 @@ export default function PlanWeekView(props) {
         let eventStartOffset = DAY_HEADER_HEIGHT + ADDITIONAL_TOP_OFFSET + (eventFromHour * 60 + eventFromMinute - FROM_HOUR * 60) / 60 * ROW_HEIGHT;
         let eventHeight = eventLengthInMinutes / 60 * ROW_HEIGHT;
 
-        return <div className='eventDisplay' style={{top: eventStartOffset, height: eventHeight, backgroundColor:event.color}}>
-                Test test test test test test test test test test test test test test test
-            </div>;
+        return <EventTile color={event.color} fontColor={event.fontColor} top={eventStartOffset} height={eventHeight} roomNr={event.roomNr} name={event.name} person={event.person} parity={event.parity} other={event.other} />
     }
 }

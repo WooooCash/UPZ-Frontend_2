@@ -1,0 +1,89 @@
+.eventDisplay {
+    position: absolute;
+
+    box-sizing: border-box;
+
+    /* background-color: var(--grey); */
+    border-radius: 4px;
+
+    top: 100px;
+    left: 0px;
+    right: 0px;
+    height: 40px;
+
+    margin-left: 4px;
+    margin-right: 4px;
+
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 6px;
+
+    overflow: hidden;
+
+    z-index: 4;
+
+    box-shadow: #0007 0px 5px 10px;
+
+    transition-property: box-shadow;
+    transition-duration: 100ms;
+}
+
+.eventDisplay:hover {
+    cursor: pointer;
+
+    box-shadow: #000a 0px 7px 15px;
+}
+
+.eventDisplayParityDisplay {
+    position: absolute;
+    display: flex;
+
+    top: 0px;
+    right: 0px;
+
+    width: 22px;
+    height: 22px;
+
+    background-color: #fffa;
+    color: black;
+
+    align-content: center;
+    justify-content: center;
+
+    border-radius: 0px 0px 0px 8px;
+
+    transition-duration: 100ms;
+    transition-property: background-color;
+}
+
+.eventDisplayParityDisplay:hover {
+    background-color: white;
+}
+
+.eventDisplayTitleRow {
+    display: flex;
+    flex-direction: row;
+
+    align-items: flex-end;
+}
+
+.eventDisplayRoomNr {
+    font-size: 24px;
+}
+
+.eventDisplayName {
+    margin-bottom: 2px;
+    margin-left: 8px;
+}
+
+.eventDisplayOther {
+    margin-top: 4px;
+}
+
+.eventDisplayPersonNameRow {
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+}

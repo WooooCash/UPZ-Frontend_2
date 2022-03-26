@@ -100,38 +100,3 @@
     border-bottom: 1px solid #aaaaaa;
 }
 
-.eventDisplay {
-    position: absolute;
-
-    box-sizing: border-box;
-
-    /* background-color: var(--grey); */
-    border-radius: 4px;
-
-    top: 100px;
-    left: 0px;
-    right: 0px;
-    height: 40px;
-
-    margin-left: 4px;
-    margin-right: 4px;
-
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 2px;
-
-    overflow: hidden;
-
-    z-index: 4;
-
-    box-shadow: #0005 0px 5px 10px;
-
-    transition-property: box-shadow;
-    transition-duration: 100ms;
-}
-
-.eventDisplay:hover {
-    cursor: pointer;
-
-    box-shadow: #0007 0px 7px 15px;
-}
