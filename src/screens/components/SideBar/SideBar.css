@@ -13,6 +13,8 @@
 }
 
 .sideBarExpanded {
+    position: static;
+    height: 100%;
     width: 250px;
     background-color: var(--light-grey);
 }
@@ -99,4 +101,11 @@
 .planListEntry:hover {
     background-color: var(--secondary-light);
     border-color: var(--secondary-light);
+}
+@media only screen and (max-width: 680px) {
+    .sideBarExpanded{
+        position: absolute;
+        width: 100vw;
+    }
+    
 }

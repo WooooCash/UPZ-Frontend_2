@@ -1,4 +1,4 @@
-.column {
+.column-consultations {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -9,14 +9,14 @@
     flex-direction: column;
 }
 
-.content-box {
+.content-box-consultations {
     flex: 1;
     display: flex;
 
     overflow: hidden;
 }
 
-.content-main {
+.content-main-consultations {
     flex: 1;
 
     overflow-y: scroll;
@@ -25,15 +25,15 @@
     padding: 40px;
 }
 
-.content-main::-webkit-scrollbar-track {
+.content-main-consultations::-webkit-scrollbar-track {
     background: var(--light-grey);
 }
 
-.content-main::-webkit-scrollbar-track {
+.content-main-consultations::-webkit-scrollbar-track {
     background: var(--primary-light-light);
 }
 
-.schedule-view {
+.schedule-view-consultations {
     box-sizing: border-box;
 
     width: 100%;

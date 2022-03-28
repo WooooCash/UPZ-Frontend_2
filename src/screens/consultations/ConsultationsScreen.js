@@ -10,10 +10,10 @@ import Consultations from "./ConsultationsView/Consultations";
 
 export default function ConsultationsScreen(props) {
     return (
-        <div className="column">
+        <div className="column-consultations">
             <NavBar />
-            <div className="content-box">
-                <div className="content-main">
+            <div className="content-box-consultations">
+                <div className="content-main-consultations">
                     <Consultations />
                 </div>
                 <SideBar />
