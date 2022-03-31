@@ -6,9 +6,10 @@
     /* background-color: var(--grey); */
     border-radius: 4px;
 
-    top: 100px;
+    /* top: 100px; */
     left: 0px;
     right: 0px;
+    /* width: fit-content; */
     height: 40px;
 
     margin-left: 4px;
@@ -64,17 +65,18 @@
 .eventDisplayTitleRow {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 
-    align-items: flex-end;
+    align-items: baseline;
 }
 
 .eventDisplayRoomNr {
     font-size: 24px;
+    margin-right: 8px;
 }
 
 .eventDisplayName {
-    margin-bottom: 2px;
-    margin-left: 8px;
+    /* margin-bottom: 2px; */
 }
 
 .eventDisplayOther {

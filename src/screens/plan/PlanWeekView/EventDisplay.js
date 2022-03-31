@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons';
 import './EventDisplay.css';
 
-export default function EventDisply(props) {
+export default function EventDisplay(props) {
 
     const [hovered, setHovered] = useState(false);
 
@@ -12,6 +12,8 @@ export default function EventDisply(props) {
         color: props.fontColor ?? 'black',
         top: props.top ?? 0, 
         height: props.height,
+        width: props.width ?? 'auto',
+        ...props.styleAttrs,
     };
 
     let eventDisplayHoveredStyle = {
@@ -20,7 +22,9 @@ export default function EventDisply(props) {
         top: props.top ?? 0, 
         minHeight: props.height,
         height: 'auto',
+        width: props.width ?? 'auto',
         zIndex: 100,
+        ...props.styleAttrs,
     };
     
     let parity = props.parity ?? '0';

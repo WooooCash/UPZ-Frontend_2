@@ -1,6 +1,6 @@
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef } from 'react/cjs/react.production.min';
-import EventTile from './EventDisplay';
+import EventDisplay from './EventDisplay';
 import './PlanWeekView.css'
 
 export default function PlanWeekView(props) {
@@ -37,6 +37,102 @@ export default function PlanWeekView(props) {
         )
     }
 
+    // algorytm rozmieszczania eventów
+    // https://stackoverflow.com/questions/11311410/visualization-of-calendar-events-algorithm-to-layout-events-with-maximum-width?utm_source=pocket_mylist
+
+    // utworzenie lokalnej zmiennej na eventy (którą będzie można później modyfikować)
+    let events = JSON.parse(JSON.stringify(props.events));
+
+    // dodanie '0' do godzin, które nie mają zera na początku np. do '8:00', żeby było '08:00' (potrzebne do algorytmu ustawiającego eventy w ramach dnia)
+    for (var event of events) {
+        if (event.from.length < 5) event.from = '0' + event.from;
+        if (event.to.length < 5) event.to = '0' + event.to;
+    }
+
+    // sortowanie eventów po atrybutach (w kolejności): dayNumber - from - to (posortowane eventy będą przydatne później)
+    events.sort((a, b) => {
+        if (a.dayNumber < b.dayNumber) return -1;
+        if (a.dayNumber > b.dayNumber) return 1;
+
+        if (a.from < b.from) return -1;
+        if (a.from > b.from) return 1;
+
+        if (a.to < b.to) return -1;
+        if (a.to > b.to) return 1;
+        return 0;
+    });
+
+    console.log(events);
+
+    // rozmieszczanie eventów
+    for (var event of events) {
+
+        var startColumnNumber = 0; // pierwsza kolumna będzie miała numer 1 (w pierwszym obiegu pętli do-while jest ustawiana na 1) (bo może to być potrzebne w grid layout - a w grid layout numeracja kolumn zaczyna się od 1)
+
+        // sprawdzenie kolizji
+        var collidesWithAnotherEvent = false;
+        do {
+            collidesWithAnotherEvent = false;
+            startColumnNumber++;
+            // sprawdzenie, czy obecny event koliduje z jakimś innym eventem w danej podkolumnie
+            if (events.filter((ev) => ev.column == startColumnNumber && ev.dayNumber == event.dayNumber && checkEventsHoursCollision(ev, event)).length > 0) {
+                collidesWithAnotherEvent = true;
+                // console.log('collision');
+            }
+        } while (collidesWithAnotherEvent == true);
+
+        // console.log('final start column: ' + startColumnNumber);
+
+        event.column = startColumnNumber;
+    }
+
+    // zmienna pomocnicza przechowująca liczbę podkolumn dla danej kolumny (dnia)
+    var subColumnsCountForColumn = new Map();
+
+    // zliczenie ile jest podkolumn dla danej kolumny
+    for (let event of events) {
+        if (!subColumnsCountForColumn.has(event.dayNumber)) {
+            subColumnsCountForColumn.set(event.dayNumber, 1);
+        } else {
+            if ((event.column ?? 0) > subColumnsCountForColumn.get(event.dayNumber)) {
+                subColumnsCountForColumn.set(event.dayNumber, event.column ?? 0);
+            }
+        }
+    }
+
+    // console.log(subColumnsCountForColumn);
+
+    // ustalenie szerokości eventów
+    for (var event of events) {
+        if ((event.column ?? 0) <= 0) continue;
+
+        var startColumnNumber = (event.column ?? 0);
+        if (startColumnNumber <= 0) continue;
+
+        let maxColumns = 1;
+        if (subColumnsCountForColumn.has(event.dayNumber)) {
+            maxColumns = subColumnsCountForColumn.get(event.dayNumber);
+        }
+
+        // console.log('max cols ' + maxColumns);
+
+        event.columnSpan = 1;
+
+        var collidesWithAnotherEvent = false;
+
+        while (collidesWithAnotherEvent == false) {
+            startColumnNumber++;
+            // sprawdzenie, czy obecny event koliduje z jakimś innym eventem w danej podkolumnie
+            if (events.filter((ev) => ev.column == startColumnNumber && ev.dayNumber == event.dayNumber && checkEventsHoursCollision(ev, event)).length > 0 ||
+                startColumnNumber > maxColumns) {
+                collidesWithAnotherEvent = true;
+                // console.log('collision');
+            } else {
+                event.columnSpan++;
+            }
+        }
+    }
+
     var eventsByDays = new Map();
     eventsByDays.set('1', []);
     eventsByDays.set('2', []);
@@ -46,11 +142,15 @@ export default function PlanWeekView(props) {
     eventsByDays.set('6', []);
     eventsByDays.set('7', []);
     
-    for (let event of props.events) {
+    for (let event of events) {
         if (eventsByDays.has(event.dayNumber)) {
             eventsByDays.get(event.dayNumber).push(generateEventDiv(event));
         }
     }
+
+    // for (let event of events) {
+    //     console.log('day: ' + event.dayNumber + ', from: ' + event.from + ', to: ' + event.to + ', column: ' + event.column + ', span: ' + event.columnSpan);
+    // }
 
     return (
         <div className='planWeekViewMainContainer'>
@@ -61,7 +161,9 @@ export default function PlanWeekView(props) {
                 <div className='planWeekViewDays'>
                     <div className='planWeekViewDayColumn'>
                         <div className='planWeekViewDayHeader' style={{ height: `${DAY_HEADER_HEIGHT}px` }}>Pon.</div>
-                        {eventsByDays.get('1')}
+                        <div style={{position: 'absolute', top: '0px', bottom: '0px', left: '0px', right: '0px', display: 'grid', gridTemplateRows: '1fr', gridTemplateColumns: '1fr '.repeat(subColumnsCountForColumn.get('1'))}}>
+                            {eventsByDays.get('1')}
+                        </div>
                     </div>
                     <div className='planWeekViewDayColumn'>
                         <div className='planWeekViewDayHeader' style={{ height: `${DAY_HEADER_HEIGHT}px` }}>Wt.</div>
@@ -85,6 +187,10 @@ export default function PlanWeekView(props) {
         </div>
     );
 
+    function checkEventsHoursCollision(eventA, eventB) {
+        return ((eventB.from >= eventA.from) && (eventB.from < eventA.to)) || ((eventB.to <= eventA.to) && (eventB.to > eventA.from));
+    }
+
     function generateEventDiv(event) {
         let eventFromTime = event.from.split(':');
         let eventFromHour = Number.parseInt(eventFromTime[0] ?? '0');
@@ -99,6 +205,10 @@ export default function PlanWeekView(props) {
         let eventStartOffset = DAY_HEADER_HEIGHT + ADDITIONAL_TOP_OFFSET + (eventFromHour * 60 + eventFromMinute - FROM_HOUR * 60) / 60 * ROW_HEIGHT;
         let eventHeight = eventLengthInMinutes / 60 * ROW_HEIGHT;
 
-        return <EventTile color={event.color} fontColor={event.fontColor} top={eventStartOffset} height={eventHeight} roomNr={event.roomNr} name={event.name} person={event.person} parity={event.parity} other={event.other} />
+        let id = Math.round(Math.random() * 10000);
+
+        let styleAttrs = {id: id, gridColumnStart: event.column, gridColumnEnd: event.column + event.columnSpan};
+
+        return <EventDisplay key={event.id} styleAttrs={styleAttrs} color={event.color} fontColor={event.fontColor} top={eventStartOffset} height={eventHeight} roomNr={event.roomNr} name={event.name} person={event.person} parity={event.parity} other={event.other} />
     }
 }
