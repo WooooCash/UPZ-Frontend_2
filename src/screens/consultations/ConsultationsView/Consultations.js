@@ -39,9 +39,11 @@ export default function Conultations(props) {
                 tempData[cons.teacherId] = {}
             }
             for(let cons of result.fetchTutorships) {
-                tempData[cons.teacherId][cons.id] = cons
+                tempData[cons.teacherId][cons.id] = cons;
+                tempData[cons.teacherId][cons.id].len = 1;
             }
             setConsultations(tempData);
+            console.log("consultations", tempData);
         });
         getTeachers().then(result => {
             let tempData = {}
@@ -65,14 +67,29 @@ export default function Conultations(props) {
     }
 
     const prepareData = (id, name) => {
-        var evs = Object.entries(consultations[id]).map((consId) => {
+        const cons_arr = Object.values(consultations[id])
+        
+        let merged_arr = cons_arr.reduce((prev, next) => {
+            var latest = prev[prev.length - 1];
+            if (latest 
+                && latest.description == next.description 
+                && latest.day == next.day
+                && next.hour - latest.hour <= latest.len) {
+                    latest.len += 1;
+            } else 
+                prev.push(next);
+            
+            return prev;
+        }, []);
+
+        var evs = merged_arr.map((cons) => {
             var event = {
-                dayNumber: consId[1].day.toString(),
-                from: hours[consId[1].hour-1][0],
-                to: hours[consId[1].hour-1][1],
+                dayNumber: cons.day.toString(),
+                from: hours[cons.hour-1][0],
+                to: hours[cons.hour + cons.len - 2][1],
                 color: '#64c954',
                 person: name,
-                other: consId[1].description
+                other: cons.description
             }
 
             return event;
