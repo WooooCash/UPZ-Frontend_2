@@ -25,14 +25,12 @@ const hours = [
 export default function Conultations(props) {
 
     const [consultations, setConsultations] = useState({})
-    const [teachers, setTeachers] = useState({})
+    const [teachers, setTeachers] = useState([])
     const [currentProf, setCurrentProf] = useState(0)
-    const [profName, setProfName] = useState("")
     const [events, setEvents] = useState([])
 
 
     useEffect(() => {
-        console.log("api call")
         getConsultations().then(result => {
             let tempData = {}
             for(let cons of result.fetchTutorships) {
@@ -43,17 +41,13 @@ export default function Conultations(props) {
                 tempData[cons.teacherId][cons.id].len = 1;
             }
             setConsultations(tempData);
-            console.log("consultations", tempData);
         });
         getTeachers().then(result => {
-            let tempData = {}
-            for(let teacher of result.fetchTeachers) {
-                let fullName = teacher.lastName
-                if (teacher.name != null)
-                    fullName = teacher.name + " " + teacher.lastName;
+            let tempData = result.fetchTeachers
+ 
+            for (const t of tempData)
+                t.fullName = t.name ? t.name + " " + t.lastName : t.lastName;
 
-                tempData[fullName] = teacher;
-            }
             setTeachers(tempData);
         });
     }, [])
@@ -62,13 +56,12 @@ export default function Conultations(props) {
         let profId = e.target.value;
         let profName = e.target.options[e.target.selectedIndex].text;
         setCurrentProf(profId)
-        setProfName(profName)
         prepareData(profId, profName);
     }
 
     const prepareData = (id, name) => {
         const cons_arr = Object.values(consultations[id])
-        
+
         let merged_arr = cons_arr.reduce((prev, next) => {
             var latest = prev[prev.length - 1];
             if (latest 
@@ -104,8 +97,8 @@ export default function Conultations(props) {
                 <br />
                 <select name="profs" id="profs" onChange={switchProf}>
                         <option value="0" selected disabled>--Select--</option>
-                        {Object.entries(teachers).map((prof) => (
-                            <option value={prof[1].id}>{prof[0]}</option>
+                        {teachers.map((prof) => (
+                            <option value={prof.id}>{prof.fullName}</option>
                         ))}
                 </select>
             </div>
