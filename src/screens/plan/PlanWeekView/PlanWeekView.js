@@ -167,19 +167,27 @@ export default function PlanWeekView(props) {
                     </div>
                     <div className='planWeekViewDayColumn'>
                         <div className='planWeekViewDayHeader' style={{ height: `${DAY_HEADER_HEIGHT}px` }}>Wt.</div>
-                        {eventsByDays.get('2')}
+                        <div style={{position: 'absolute', top: '0px', bottom: '0px', left: '0px', right: '0px', display: 'grid', gridTemplateRows: '1fr', gridTemplateColumns: '1fr '.repeat(subColumnsCountForColumn.get('2'))}}>
+                            {eventsByDays.get('2')}
+                        </div>
                     </div>
                     <div className='planWeekViewDayColumn'>
                         <div className='planWeekViewDayHeader' style={{ height: `${DAY_HEADER_HEIGHT}px` }}>Śr.</div>
-                        {eventsByDays.get('3')}
+                        <div style={{position: 'absolute', top: '0px', bottom: '0px', left: '0px', right: '0px', display: 'grid', gridTemplateRows: '1fr', gridTemplateColumns: '1fr '.repeat(subColumnsCountForColumn.get('3'))}}>
+                            {eventsByDays.get('3')}
+                        </div>
                     </div>
                     <div className='planWeekViewDayColumn'>
                         <div className='planWeekViewDayHeader' style={{ height: `${DAY_HEADER_HEIGHT}px` }}>Czw.</div>
-                        {eventsByDays.get('4')}
+                        <div style={{position: 'absolute', top: '0px', bottom: '0px', left: '0px', right: '0px', display: 'grid', gridTemplateRows: '1fr', gridTemplateColumns: '1fr '.repeat(subColumnsCountForColumn.get('4'))}}>
+                            {eventsByDays.get('4')}
+                        </div>
                     </div>
                     <div className='planWeekViewDayColumn'>
                         <div className='planWeekViewDayHeader' style={{ height: `${DAY_HEADER_HEIGHT}px` }}>Pt.</div>
-                        {eventsByDays.get('5')}
+                        <div style={{position: 'absolute', top: '0px', bottom: '0px', left: '0px', right: '0px', display: 'grid', gridTemplateRows: '1fr', gridTemplateColumns: '1fr '.repeat(subColumnsCountForColumn.get('5'))}}>
+                            {eventsByDays.get('5')}
+                        </div>
                     </div>
                 </div>
             </div>
