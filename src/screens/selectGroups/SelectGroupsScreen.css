@@ -1,0 +1,78 @@
+.selectGroupsScreenMainContainer {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+
+    /* background-color: blue; */
+}
+
+.selectGroupsScreenNavBar{
+    display: flex;
+    flex-direction: row;
+
+    background-color: var(--light-grey);
+    border: 1px solid var(--grey);
+    justify-content: start;
+    align-items: center;
+
+    /* height: 64px; */
+}
+
+.selectGroupsScreenBackButton {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 8px;
+
+    height: 40px;
+    width: 40px;
+
+    font-size: 24px;
+
+    border: 1px solid var(--primary-light);
+    background-color: transparent;
+    border-radius: 5px;
+
+    color: var(--primary-light);
+
+    transition-property: background-color, color;
+    transition-duration: 150ms;
+}
+
+.selectGroupsScreenBackButton:hover {
+    cursor: pointer;
+
+    background-color: var(--primary-light);
+    color: white;
+}
+
+.selectGroupsScreenTitle {
+    margin-left: 12px;
+
+    color: var(--primary-light);
+
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.selectGroupsScreenContent {
+    flex: 1;
+
+    overflow: auto;
+}
+
+.selectGroupsScreenSummaryView {
+    max-height: 40%;
+    min-height: 140px;
+
+    background-color: var(--light-grey);
+    border-top: 1px solid var(--grey);
+}

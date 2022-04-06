@@ -5,6 +5,7 @@ import MainScreen from "./screens/main/MainScreen.js";
 import ConsultationsScreen from './screens/consultations/ConsultationsScreen';
 import PlanScreen from './screens/plan/PlanScreen';
 import Scheduletest from './components/scheduletest/Scheduletest';
+import SelectGroupsScreen from './screens/selectGroups/SelectGroupsScreen';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
@@ -14,6 +15,7 @@ ReactDOM.render(
       <Route exact path="/consultations" component={ConsultationsScreen} />
       <Route exact path="/planTest" component={PlanScreen} />
       <Route exact path="/schedule" component={Scheduletest} />
+      <Route exact path="/selectGroups" component={SelectGroupsScreen} />
       <Route exact path="/" component={MainScreen}/>
     </Router>
   </React.StrictMode>,
