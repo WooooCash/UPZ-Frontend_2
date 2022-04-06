@@ -62,7 +62,7 @@ export default function PlanWeekView(props) {
         return 0;
     });
 
-    console.log(events);
+    console.log("events in planweekview component", events);
 
     // rozmieszczanie eventów
     for (var event of events) {
