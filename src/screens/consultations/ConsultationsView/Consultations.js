@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { getConsultations, getTeachers } from "../../../util/api.js"
+import { getConsultations, getTeachers, getTitles } from "../../../util/api.js"
 import PlanWeekView from '../../plan/PlanWeekView/PlanWeekView'
 import "./Consultations.css"
 
@@ -26,6 +26,7 @@ export default function Conultations(props) {
 
     const [consultations, setConsultations] = useState({})
     const [teachers, setTeachers] = useState([])
+    const [titles, setTitles] = useState({})
     const [currentProf, setCurrentProf] = useState(0)
     const [events, setEvents] = useState([])
 
@@ -33,9 +34,9 @@ export default function Conultations(props) {
     useEffect(() => {
         getConsultations().then(result => {
             let tempData = {}
-            for(let cons of result.fetchTutorships) {
+            for(let cons of result.fetchTutorships) 
                 tempData[cons.teacherId] = {}
-            }
+            
             for(let cons of result.fetchTutorships) {
                 tempData[cons.teacherId][cons.id] = cons;
                 tempData[cons.teacherId][cons.id].len = 1;
@@ -43,12 +44,22 @@ export default function Conultations(props) {
             setConsultations(tempData);
         });
         getTeachers().then(result => {
-            let tempData = result.fetchTeachers
+            let tempData = {}
  
-            for (const t of tempData)
+            for (let t of result.fetchTeachers)
                 t.fullName = t.name ? t.name + " " + t.lastName : t.lastName;
-
+            for(let t of result.fetchTeachers) 
+                tempData[t.id] = t
+            
+            console.log("teachers", tempData)
             setTeachers(tempData);
+        });
+        getTitles().then(result => {
+            let tempData = {};
+            for(let t of result.fetchTitles) 
+                tempData[t.id] = t.name;
+            
+            setTitles(tempData);
         });
     }, [])
 
@@ -76,15 +87,15 @@ export default function Conultations(props) {
         }, []);
 
         var evs = merged_arr.map((cons) => {
+            let title = titles[teachers[id].titleId] || "";
             var event = {
                 dayNumber: cons.day.toString(),
                 from: hours[cons.hour-1][0],
                 to: hours[cons.hour + cons.len - 2][1],
                 color: '#64c954',
-                person: name,
+                person: title + " " + name,
                 other: cons.description
             }
-
             return event;
         })
         setEvents(evs)
@@ -97,8 +108,8 @@ export default function Conultations(props) {
                 <br />
                 <select name="profs" id="profs" onChange={switchProf}>
                         <option value="0" selected disabled>--Select--</option>
-                        {teachers.map((prof) => (
-                            <option value={prof.id}>{prof.fullName}</option>
+                        {Object.keys(teachers).map((profId) => (
+                            <option value={profId}>{teachers[profId].fullName}</option>
                         ))}
                 </select>
             </div>

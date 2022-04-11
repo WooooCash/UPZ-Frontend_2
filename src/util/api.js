@@ -58,6 +58,27 @@ export function getTeachers(){
                     name,
                     lastName,
                     shorterName,
+                    titleId,
+                }
+            }`
+        },
+        headers:{
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+    }).then((response) =>{
+        return response.data.data;
+    })
+}
+export function getTitles(){
+    return axios({url:"https://upz-graphql.herokuapp.com/graphql",
+    
+        method:'post',
+        data:{
+            query: `query {
+                fetchTitles {
+                    id,
+                    name,
                 }
             }`
         },
