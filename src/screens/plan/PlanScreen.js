@@ -21,6 +21,7 @@ export default function PlanScreen(props) {
     return (
         <div className='planScreenMainContainer'>
             <div className='planScreenPlanName'>Plan zajęć</div>
+            
             <PlanWeekView events={events}/>
         </div>
     );

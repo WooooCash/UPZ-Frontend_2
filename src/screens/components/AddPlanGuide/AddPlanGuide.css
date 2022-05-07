@@ -1,10 +1,12 @@
 .guideContainer {
+    overflow: auto;
     box-sizing: border-box;
 
-    display: flex;
+    display: table;
+
     flex-direction: column;
 
-    height: 700px;
+    height: 45vh;
     width: 100%;
 
     background-color: var(--primary-light);
@@ -15,6 +17,16 @@
 
     transition-duration: 150ms;
     transition-property: height;
+}
+@media only screen and (max-width: 1200px) {
+    .guideContainer {
+        height: 55vh;
+    }
+}
+@media only screen and (max-width: 500px) {
+    .guideContainer {
+        height: 65vh;
+    }
 }
 
 .guideContainerCollapsed {
@@ -109,6 +121,7 @@
 
     align-items: center;
     justify-content: center;
+    display: table-row;
 }
 
 .contentRow {

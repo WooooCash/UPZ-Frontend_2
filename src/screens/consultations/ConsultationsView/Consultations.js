@@ -93,6 +93,14 @@ export default function Conultations(props) {
     return(
         <div>
             <div className="select-form">
+                <div id="myModal" class="modal">
+
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p>Some text in the Modal..</p>
+                </div>
+
+                </div>
                 <label>Wybierz profesora</label>
                 <br />
                 <select name="profs" id="profs" onChange={switchProf}>
