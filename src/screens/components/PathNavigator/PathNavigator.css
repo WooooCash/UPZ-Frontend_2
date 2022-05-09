@@ -13,7 +13,22 @@
 
     scrollbar-color: var(--primary-light-light) var(--primary-light);
 }
+.pathNavigatorContainer {
+    /* height: 20px; */
+    /* background-color: red; */
 
+    /* position: absolute; */
+
+    padding-top: 4px;
+    /* padding-left: 12px; */
+    padding-bottom: 4px;
+    /* padding-right: 12px; */
+    display: flex;
+    flex-wrap: wrap;
+    overflow-x: auto;
+
+    scrollbar-color: var(--primary-light-light) var(--primary-light);
+}
 .pathNavigatorContainer::-webkit-scrollbar-track {
     background: var(--primary-light);
 }

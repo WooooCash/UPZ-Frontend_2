@@ -8,16 +8,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function TreeNode(props) {
     const { node, getChildNodes, onToggle, level } = props;
 
+    const default_link = "https://degra.wi.pb.edu.pl/rozklady/doc/";
+
     const getNodeLabel = (node) => {
         const subdivs = node.path.split('/');
         return subdivs[subdivs.length - 1];
     }
 
     const toggleOpen = () => {
-        node.isOpen = !node.isOpen;
-
-
-        onToggle(node);
+        if (node.type == "category"){
+            node.isOpen = !node.isOpen;
+            onToggle(node);
+        } else if (node.type == "schedule") {
+            // console.log(node.children)
+            let link = default_link + node.children[0] + ".pdf";
+            // console.log('link', link)
+            window.open(link);
+        }
     }
 
     const getPaddingLeft = (level, type) => {
@@ -28,6 +35,7 @@ export default function TreeNode(props) {
 
     return(
         <React.Fragment>
+            
             <div className="treeNode" level={level} type={node.type} onClick={toggleOpen} style={{marginLeft: getPaddingLeft(level, node.type)+'px', paddingLeft: 15 +'px'}}>
                 <div>
                     { node.type === 'category' && (node.isOpen ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronRight} />) }
@@ -43,6 +51,7 @@ export default function TreeNode(props) {
                     { getNodeLabel(node) }
                 </span>
             </div>
+            
 
             { node.isOpen && getChildNodes(node).map(childNode => (
                 <TreeNode

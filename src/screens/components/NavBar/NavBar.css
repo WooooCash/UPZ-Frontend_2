@@ -31,6 +31,11 @@
     transition: 0.25s;
     transition-property: box-shadow, color;
 }
+@media screen and (max-width: 370px){
+    .navbar-button {
+        width: 100px;
+    }
+}
 
 .navbar-button:hover, .navbar-button:focus {
     box-shadow: inset -8.5em 0 0 0 var(--primary-light);

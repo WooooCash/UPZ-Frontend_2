@@ -153,6 +153,7 @@ export default function Tree() {
             for(let node of result.fetchJsonType) {
                 tempData[node.path] = node;
             }
+            console.log("tree", tempData)
             setNodes(tempData);
             setLoading(false)
         });
