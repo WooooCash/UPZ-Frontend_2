@@ -4,32 +4,35 @@ import PathNavigator from "../PathNavigator/PathNavigator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuilding, faMapMarkerAlt, faArrowLeft, faChevronUp, faSquareRootAlt, faLaptopCode, faFunnelDollar, faAsterisk } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { useHistory } from 'react-router-dom';
 
 export default function AddPlanGuide(props) {
+
+    const history = useHistory();
 
     const [collapsed, setCollapsed] = useState(false);
     const [screenNumber, setScreenNumber] = useState(0);
 
-    const [locality, setLocality] = useState('');
-    const [field, setField] = useState('');
-    const [degree, setDegree] = useState('');
-    const [speciality, setSpeciality] = useState('');
-    const [semester, setSemester] = useState('');
+    const [availableTypesOfStudy, setAvailableTypesOfStudy] = useState([]);
+    const [availableMajors, setAvailableMajors] = useState([]);
+    const [availableDegrees, setAvailableDegrees] = useState([]);
+    const [availableSpecialities, setAvailableSpecialities] = useState([]);
+    const [availableSemesters, setAvailableSemesters] = useState([]);
 
-    const [studies, setStudies] = useState([]);
-    const [specialities, setSpecialities] = useState([]);
+    const [selectedTypeOfStudy, setSelectedTypeOfStudy] = useState('');
+    const [selectedMajor, setSelectedMajor] = useState('');
+    const [selectedDegree, setSelectedDegree] = useState('');
+    const [selectedSpeciality, setSelectedSpeciality] = useState('');
 
-    const [studySpecialities, setStudySpecialities] = useState({});
-    const [studySemesters, setStudySemesters] = useState({});
 
-    const localities = [
+    const typesOfStudy = [
         {
-            "id": "stac.",
+            "id": "stacjonarne",
             "name": "Stacjonarne",
             "image": <FontAwesomeIcon icon={faBuilding} />
         },
         {
-            "id": "niest.",
+            "id": "niestacjonarne",
             "name": "Niestacjonarne",
             "image": <FontAwesomeIcon icon={faMapMarkerAlt} />
         },
@@ -40,19 +43,19 @@ export default function AddPlanGuide(props) {
         },
     ];
 
-    const fields = [
+    const majors = [
         {
             "id": "informatyka",
             "name": "Informatyka",
             "image": <FontAwesomeIcon icon={faLaptopCode} />
         },
         {
-            "id": "mat. stos.",
+            "id": "matematyka stosowana",
             "name": "Matematyka stosowana",
             "image": <FontAwesomeIcon icon={faSquareRootAlt} />
         },
         {
-            "id": "inf. i ekon.",
+            "id": "informatyka i ekonometria",
             "name": "Informatyka i ekonometria",
             "image": <FontAwesomeIcon icon={faFunnelDollar} />
         },
@@ -86,161 +89,98 @@ export default function AddPlanGuide(props) {
         },
     ]
 
-    const semesterNames = ["Semestr 1.", "Semestr 2.", "Semestr 3.", "Semestr 4.", "Semestr 5.", "Semestr 6.", "Semestr 7."]
-
-    const [semesters, setSemesters] = useState([]);
-
     const screenTitles = ["Wybierz rodzaj studiów", "Wybierz kierunek", 'Wybierz stopień', 'Wybierz specjalizację', 'Wybierz semestr'];
 
-    useEffect(() => {
-        console.log('effect');
-        axios({url:"https://upz-graphql.herokuapp.com/graphql",
-            method:'post',
-            data:{
+    function getTypeOfStudiesAxiosConfig() {
+        return {
+            url: "https://upz-graphql.herokuapp.com/graphql",
+            method: 'post',
+            data: {
                 query: `query {
-                    fetchPlans{
-                        studyId,
-                        specialityId,
-                        semester,
+                    fetchTypeOfStudies
+                }`
+            },
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+    }
+
+    function getMajorsAxiosConfig(typeOfStudyName) {
+        return {
+            url: "https://upz-graphql.herokuapp.com/graphql",
+            method: 'post',
+            data: {
+                query: `query {
+                    fetchMajors (typeOfStudyName: "${typeOfStudyName}")
+                }`
+            },
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+    }
+
+    function getDegreeAxiosConfig(typeOfStudyName, majorName) {
+        return {
+            url: "https://upz-graphql.herokuapp.com/graphql",
+            method: 'post',
+            data: {
+                query: `query {
+                    fetchDegree (typeOfStudyName: "${typeOfStudyName}", majorName: "${majorName}")
+                }`
+            },
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+    }
+
+    function getSpecialitiesAxiosConfig(typeOfStudyName, majorName, degree) {
+        return {
+            url: "https://upz-graphql.herokuapp.com/graphql",
+            method: 'post',
+            data: {
+                query: `query {
+                    fetchSpecialities (typeOfStudyName: "${typeOfStudyName}", majorName: "${majorName}", degree: "${degree}") {
+                        id, name
                     }
                 }`
             },
-            headers:{
+            headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
+            }
+        };
+    }
+
+    function getSemestersAxiosConfig(typeOfStudyName, majorName, degree, specialityId) {
+        return {
+            url: "https://upz-graphql.herokuapp.com/graphql",
+            method: 'post',
+            data: {
+                query: `query {
+                    fetchSemesters (typeOfStudyName: "${typeOfStudyName}", majorName: "${majorName}", degree: "${degree}", specialityId: "${specialityId}")
+                }`
             },
-        }).then(response =>{
-
-            let newStudySpecialities = {};
-            response.data.data.fetchPlans.forEach(plan => {
-                if (!newStudySpecialities[Number.parseInt(plan.studyId)]) {
-                    newStudySpecialities[Number.parseInt(plan.studyId)] = new Set();
-                }
-                newStudySpecialities[Number.parseInt(plan.studyId)].add(plan.specialityId);
-            });
-            setStudySpecialities(newStudySpecialities);
-
-            let newStudySemesters = {};
-            response.data.data.fetchPlans.forEach(plan => {
-                if (!newStudySemesters[Number.parseInt(plan.studyId)]) {
-                    newStudySemesters[Number.parseInt(plan.studyId)] = new Set();
-                }
-                newStudySemesters[Number.parseInt(plan.studyId)].add(plan.semester);
-            });
-            setStudySemesters(newStudySemesters);
-
-            let studyIds = new Set();
-            response.data.data.fetchPlans.map((plan) => plan.studyId).forEach(id => {
-                if (id != null && id != '' && id != 'null') {
-                    studyIds.add(id);
-                }
-            });
-
-            if (studyIds.size > 0) {
-                axios({url:"https://upz-graphql.herokuapp.com/graphql",
-                    method:'post',
-                    data:{
-                        query: `query {
-                            fetchStudies{
-                                id,
-                                name
-                            }
-                        }`
-                    },
-                    headers:{
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
-                }).then(response =>{
-                    // let studies = new Set();
-                    // response.data.data.fetchStudies.forEach((study) => {
-                    //     if (studyIds.has(Number.parseInt(study.id))) {
-                    //         studies.add(study.name);
-                    //     } 
-                    // })
-                    // console.log(studies);
-
-                    // sparsowanie dostępnych studiów
-                    let newStudies = [];
-                    for (let study of response.data.data.fetchStudies) {
-                        let newEntry = {
-                            "id": Number.parseInt(study.id),
-                            "locality": "other",
-                            "field": "other",
-                            "degree": "other",
-                            "original": ""
-                        };
-                        newEntry.original = study.name;
-                        // ustalenie stacjonarności
-                        if (/stac\./.test(study.name)) {
-                            newEntry.locality = 'stac.';
-                        } else if (/niest\./.test(study.name)) {
-                            newEntry.locality = 'niest.';
-                        } 
-                        //ustalenie kierunku
-                        try {
-                            let field = (/kier\.\s*(.*)$/g).exec(study.name)[1];
-                            newEntry.field = field;
-                        } catch {
-                            console.log('study deos not have a field')
-                        }
-                        // ustalenie stopnia
-                        try {
-                            let degree = (/(I{1,3})\s?st\./).exec(study.name)[1];
-                            newEntry.degree = degree;
-                        } catch {
-                            console.log('study does not have a degree')
-                        }
-                        newStudies.push(newEntry);
-                        console.log(newEntry);
-                    }
-                    setStudies(newStudies);
-                });
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
             }
+        };
+    }
 
-            let specialityIds = new Set();
-            response.data.data.fetchPlans.map((plan) => plan.specialityId).forEach(id => {
-                if (id != null && id != '' && id != 'null') {
-                    specialityIds.add(id);
+    useEffect(() => {
+        axios(getTypeOfStudiesAxiosConfig())
+            .then(response => {
+                if (response.status == 200) {
+                    setAvailableTypesOfStudy(response.data.data.fetchTypeOfStudies);
                 }
+                //todo: przygotować na sytuację, w której nie będzie zwrócony 200 OK
             });
-
-            if (specialityIds.size > 0) {
-                axios({url:"https://upz-graphql.herokuapp.com/graphql",
-                    method:'post',
-                    data:{
-                        query: `query {
-                            fetchSpecialities{
-                                id,
-                                name
-                            }
-                        }`
-                    },
-                    headers:{
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
-                }).then(response2 =>{
-                    let specialities = new Set();
-                    response2.data.data.fetchSpecialities.forEach((speciality) => {
-                        if (specialityIds.has(Number.parseInt(speciality.id))) {
-                            specialities.add(speciality.name);
-                        } 
-                    });
-                    let newSpecialities = [];
-                    for (let speciality of specialities) {
-                        let newEntry = {
-                            "id": Number.parseInt(speciality),
-                            "name": speciality.name ?? '',
-                        };
-                        newSpecialities.push(newEntry);
-                    }
-                    console.log('specialities', specialities);
-                    console.log('studySpeciality', studySpecialities);
-                    setSpecialities(newSpecialities);
-                });
-            }
-        });
     }, []);
 
     function getScreenTitle() {
@@ -256,103 +196,205 @@ export default function AddPlanGuide(props) {
         }
     }
 
-    function selectLocality(id) {
-        setLocality(id);
+    function selectTypeOfStudy(type) {
+        setSelectedTypeOfStudy(type);
         setScreenNumber(1);
+        axios(getMajorsAxiosConfig(type))
+            .then(response => {
+                if (response.status == 200) {
+                    console.log(response.data);
+                    setAvailableMajors(response.data.data.fetchMajors);
+                }
+                //todo: przygotować na sytuację, w której nie będzie zwrócony 200 OK
+            });
     }
 
-    function selectField(id) {
-        setField(id);
+    function selectMajor(major) {
+        setSelectedMajor(major);
         setScreenNumber(2);
+        axios(getDegreeAxiosConfig(selectedTypeOfStudy, major))
+            .then(response => {
+                if (response.status == 200) {
+                    console.log(response.data);
+                    setAvailableDegrees(response.data.data.fetchDegree);
+                }
+                //todo: przygotować na sytuację, w której nie będzie zwrócony 200 OK
+            });
     }
 
-    function selectDegree(id) {
-        let selectedStudy = studies.find(s => (s.locality == locality && s.field == field && s.degree == id));
-        if (selectedStudy) {
-            let specialities = [...(studySpecialities[selectedStudy.id] ?? [])]?.filter(s => s != 0);
-            console.log(specialities);
-            if (specialities.length > 0) {
-                setScreenNumber(3);
-                return;
-            }
-        }
-        setDegree(id);
-        setSpeciality('');
-        updateVisibleSemesters();
+    function selectDegree(degree) {
+        setSelectedDegree(degree);
+        axios(getSpecialitiesAxiosConfig(selectedTypeOfStudy, selectedMajor, degree))
+            .then(response => {
+                if (response.status == 200) {
+                    console.log(response.data);
+                    var specialities = response.data.data.fetchSpecialities.filter((s) => !s.name.includes('obieraln'))
+                    console.log(specialities);
+                    setAvailableSpecialities(specialities);
+                    if (specialities.length == 1 && specialities[0].id == '0') {
+                        setSelectedSpeciality("0");
+                        setScreenNumber(4);
+                        axios(getSemestersAxiosConfig(selectedTypeOfStudy, selectedMajor, degree, "0"))
+                            .then(response => {
+                                if (response.status == 200) {
+                                    console.log(response.data);
+                                    setAvailableSemesters(response.data.data.fetchSemesters);
+                                }
+                                //todo: przygotować na sytuację, w której nie będzie zwrócony 200 OK
+                            });
+                    } else {
+                        setScreenNumber(3);
+                    }
+                }
+                //todo: przygotować na sytuację, w której nie będzie zwrócony 200 OK
+            });
+    }
+
+    function selectSpeciality(speciality) {
+        setSelectedSpeciality(speciality);
         setScreenNumber(4);
+        axios(getSemestersAxiosConfig(selectedTypeOfStudy, selectedMajor, selectedDegree, speciality))
+            .then(response => {
+                if (response.status == 200) {
+                    console.log(response.data);
+                    setAvailableSemesters(response.data.data.fetchSemesters);
+                }
+                //todo: przygotować na sytuację, w której nie będzie zwrócony 200 OK
+            });
     }
 
-    function selectSemester(id) {
-        setSemester(id)
-        setScreenNumber(3);
+    function selectSemester(semester) {
+        console.log({
+            "typeOfStudies": selectedTypeOfStudy,
+            "major": selectedMajor,
+            "degree": selectedDegree,
+            "specialityId": selectedSpeciality,
+            "semester": semester,
+        });
+        //todo: zapisywanie do LocalStorage
+        history.push("/selectGroups");
     }
 
     function goBackAScreen() {
-        if (screenNumber > 0) {
+        if (screenNumber == 4 && availableSpecialities.length == 1 && availableSpecialities[0].id == 0) {
+            setScreenNumber(screenNumber - 2);
+        }
+        else if (screenNumber > 0) {
             setScreenNumber(screenNumber - 1);
-        } 
-    }
-
-    function updateVisibleSemesters() {
-        let selectedStudy = studies.find(s => (s.locality == locality && s.field == field && s.degree == degree));
-        if (selectedStudy) {
-            let semesters = [...studySemesters[selectedStudy.id]]?.filter(s => s != 0);
-            let newSemesters = [];
-            for (let semester of semesters) {
-                newSemesters.push({
-                    "id": semester,
-                    "name": "Semestr " + semester + '.',
-                    "image": semester
-                });
-            }
-            setSemester(semesters);
         }
     }
 
     function getNodesForPathNavigator() {
         let nodes = [];
-        if (locality != '') {
+        if (selectedTypeOfStudy != '') {
             nodes.push(
                 {
-                    "name": localities?.find(l => l.id == locality)?.name ?? "??",
-                    "onClick": () => setScreenNumber(0)
+                    "name": typesOfStudy?.find(l => l.id == selectedTypeOfStudy)?.name ?? "??",
+                    "onClick": () =>  {
+                        setAvailableMajors([]);
+                        setAvailableDegrees([]);
+                        setAvailableSpecialities([]);
+                        setAvailableSemesters([]);
+                        setScreenNumber(0);
+                    }
                 }
             );
         }
-        if (field != '') {
+        if (selectedMajor != '') {
             nodes.push(
                 {
-                    "name": fields?.find(f => f.id == field)?.name ?? "??",
-                    "onClick": () => setScreenNumber(1)
+                    "name": majors?.find(f => f.id == selectedMajor)?.name ?? "??",
+                    "onClick": () => {
+                        setAvailableDegrees([]);
+                        setAvailableSpecialities([]);
+                        setAvailableSemesters([]);
+                        setScreenNumber(1);
+                    }
                 }
             );
         }
-        if (speciality != '') {
+        if (selectedDegree != '') {
             nodes.push(
                 {
-                    "name": specialities?.find(s => s.id == speciality)?.name ?? "??",
-                    "onClick": () => setScreenNumber(2)
+                    "name": degrees?.find(deg => deg.id == selectedDegree)?.name ?? "??",
+                    "onClick": () => {
+                        setAvailableSpecialities([]);
+                        setAvailableSemesters([]);
+                        setScreenNumber(2);
+                    }
                 }
             );
         }
-        if (degree != '') {
+        if ((selectedSpeciality != '') && !(availableSpecialities.length == 1 && availableSpecialities[0].id == 0)) {
             nodes.push(
                 {
-                    "name": degrees?.find(deg => deg.id == degree)?.name ?? "??",
-                    "onClick": () => setScreenNumber(3 - (degree ? 1 : 0))
-                }
-            );
-        }
-        if (semester != '') {
-            nodes.push(
-                {
-                    "name": semesterNames?.find(s => s.id == semester)?.name ?? "??",
-                    "onClick": () => setScreenNumber(4)
+                    "name": availableSpecialities.find((s) => s.id == selectedSpeciality)?.name ?? "??",
+                    "onClick": () => { 
+                        setAvailableSemesters([]);
+                        if (availableSpecialities.length == 1 && availableSpecialities[0].id == 0) {
+                            setScreenNumber(2);
+                        } else {
+                            setScreenNumber(3);
+                        }
+                    }
                 }
             );
         }
 
         return nodes;
+    }
+
+    function getTypeOfStudiesOptions() {
+        return Array.from(availableTypesOfStudy).map((entry) => {
+            var foundIndex = typesOfStudy.findIndex((type) => type.id == entry)
+            if (foundIndex < 0) {
+                return typesOfStudy.find((type) => type.id == "other");
+            } else {
+                return typesOfStudy[foundIndex];
+            }
+        });
+    }
+
+    function getMajorsOptions() {
+        return Array.from(availableMajors).map((entry) => {
+            var foundIndex = majors.findIndex((major) => major.id == entry)
+            if (foundIndex < 0) {
+                return majors.find((type) => type.id == "other");
+            } else {
+                return majors[foundIndex];
+            }
+        });
+    }
+
+    function getDegreesOptions() {
+        return Array.from(availableDegrees).map((entry) => {
+            var foundIndex = degrees.findIndex((degree) => degree.id == entry)
+            if (foundIndex < 0) {
+                return degrees.find((type) => type.id == "other");
+            } else {
+                return degrees[foundIndex];
+            }
+        });
+    }
+
+    function getSpecialitiesOptions() {
+        return Array.from(availableSpecialities).map((entry) => {
+            return {
+                "id": entry.id,
+                "name": entry.name,
+                "image": <FontAwesomeIcon icon={faAsterisk} />
+            };
+        });
+    }
+
+    function getSemestersOptions() {
+        return Array.from(availableSemesters).map((entry) => {
+            return {
+                "id": entry,
+                "name": `Semestr ${entry}.`,
+                "image": <FontAwesomeIcon icon={faAsterisk} />
+            };
+        });
     }
 
     return (
@@ -370,27 +412,27 @@ export default function AddPlanGuide(props) {
                     </div>
                 </div>
             </div>
-            {/* {!collapsed &&
-                <div style={{height: "16px"}}></div>
-            } */}
-            {!collapsed && 
+            {!collapsed &&
                 <div className="paddingLeft">
                     <PathNavigator nodes={getNodesForPathNavigator().slice(0, screenNumber)} />
                 </div>
             }
             {!collapsed &&
                 <div className="guideContent">
-                    {screenNumber == 0 && 
-                        <_AddPlanGuideScreen options={localities.filter(l => studies.findIndex(s => s.locality == l.id) >= 0)} onSelect={(id) => selectLocality(id)}/>
+                    {screenNumber == 0 &&
+                        <_AddPlanGuideScreen options={getTypeOfStudiesOptions()} onSelect={(id) => {selectTypeOfStudy(id)}} />
                     }
-                    {screenNumber == 1 && 
-                        <_AddPlanGuideScreen options={fields.filter(fi => studies.findIndex(s => (s.locality == locality && s.field == fi.id)) >= 0)} onSelect={(id) => selectField(id)} />
+                    {screenNumber == 1 &&
+                        <_AddPlanGuideScreen options={getMajorsOptions()} onSelect={(id) => selectMajor(id)} />
                     }
-                    {screenNumber == 2 && 
-                        <_AddPlanGuideScreen options={degrees.filter(deg => studies.findIndex(s => (s.locality == locality && s.field == field && s.degree == deg.id)) >= 0)} onSelect={(id) => selectDegree(id)} />
+                    {screenNumber == 2 &&
+                        <_AddPlanGuideScreen options={getDegreesOptions()} onSelect={(id) => selectDegree(id)} />
+                    }
+                    {screenNumber == 3 &&
+                        <_AddPlanGuideScreen options={getSpecialitiesOptions()} onSelect={(id) => selectSpeciality(id)} />
                     }
                     {screenNumber == 4 &&
-                        <_AddPlanGuideScreen options={semesters} onSelect={(id) => selectSemester(id)} />
+                        <_AddPlanGuideScreen options={getSemestersOptions()} onSelect={(id) => selectSemester(id)} />
                     }
                 </div>
             }
@@ -413,7 +455,7 @@ function _AddPlanGuideScreen(props) {
 
     return (
         <div className="contentRow">
-            { buttons }
+            {buttons}
         </div>
     );
 }
@@ -452,7 +494,7 @@ function _SelectFieldScreen(props) {
                     <div className="guideButtonText">Informatyka i ekonometria</div>
                 </div>
                 <div className="guideButton" onClick={() => props.onSelect(2)}>
-                    <FontAwesomeIcon icon={faSquareRootAlt}/>
+                    <FontAwesomeIcon icon={faSquareRootAlt} />
                     <div className="guideButtonText">Matematyka stosowana</div>
                 </div>
             </div>
