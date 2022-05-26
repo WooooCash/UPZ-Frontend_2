@@ -35,6 +35,7 @@ export function getConsultations(){
                     description,
                     day,
                     hour,
+                    typed
                 }
             }`
         },

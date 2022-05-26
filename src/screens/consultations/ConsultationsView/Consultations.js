@@ -42,6 +42,7 @@ export default function Conultations(props) {
                 tempData[cons.teacherId][cons.id].len = 1;
             }
             setConsultations(tempData);
+            console.log("consultations", tempData)
         });
         getTeachers().then(result => {
             let tempData = {}
@@ -71,15 +72,17 @@ export default function Conultations(props) {
     }
 
     const prepareData = (id, name) => {
-        const cons_arr = Object.values(consultations[id])
+        const cons_arr = structuredClone(Object.values(consultations[id])) //clone so that descriptions don't keep adding on every time we switch back to a teacher
 
         let merged_arr = cons_arr.reduce((prev, next) => {
             var latest = prev[prev.length - 1];
             if (latest 
-                && latest.description == next.description 
+                && latest.typed == next.typed 
                 && latest.day == next.day
                 && next.hour - latest.hour <= latest.len) {
                     latest.len += 1;
+                    if (latest.description != next.description)
+                        latest.description += " " + next.description
             } else 
                 prev.push(next);
             
@@ -92,7 +95,7 @@ export default function Conultations(props) {
                 dayNumber: cons.day.toString(),
                 from: hours[cons.hour-1][0],
                 to: hours[cons.hour + cons.len - 2][1],
-                color: '#64c954',
+                color: (!cons.typed ? '#64c954' : "#50C7C7"),
                 person: title + " " + name,
                 other: cons.description
             }
@@ -104,18 +107,18 @@ export default function Conultations(props) {
     return(
         <div>
             <div className="select-form">
-                <div id="myModal" class="modal">
+                <div id="myModal" className="modal">
 
-                <div class="modal-content">
-                    <span class="close">&times;</span>
+                <div className="modal-content">
+                    <span className="close">&times;</span>
                     <p>Some text in the Modal..</p>
                 </div>
 
                 </div>
                 <label>Wybierz profesora</label>
                 <br />
-                <select name="profs" id="profs" onChange={switchProf}>
-                        <option value="0" selected disabled>--Select--</option>
+                <select name="profs" id="profs" defaultValue="0" onChange={switchProf}>
+                        <option value="0" disabled>--Select--</option>
                         {Object.keys(teachers).map((profId) => (
                             <option value={profId}>{teachers[profId].fullName}</option>
                         ))}
