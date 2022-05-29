@@ -71,6 +71,7 @@ export function getTeachers(){
         return response.data.data;
     })
 }
+
 export function getTitles(){
     return axios({url:"https://upz-graphql.herokuapp.com/graphql",
     
@@ -78,6 +79,77 @@ export function getTitles(){
         data:{
             query: `query {
                 fetchTitles {
+                    id,
+                    name,
+                }
+            }`
+        },
+        headers:{
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+    }).then((response) =>{
+        return response.data.data;
+    })
+}
+
+export function getPlans(){
+    return axios({url:"https://upz-graphql.herokuapp.com/graphql",
+    
+        method:'post',
+        data:{
+            query: `query {
+                fetchPlans {
+                    id,
+                    teacherId,
+                    day,
+                    hour,
+                    amount,
+                    classroomId,
+                    subjectId,
+                    subjectType,
+                    teacherId
+                }
+            }`
+        },
+        headers:{
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+    }).then((response) =>{
+        return response.data.data;
+    })
+}
+
+export function getSubjects(){
+    return axios({url:"https://upz-graphql.herokuapp.com/graphql",
+    
+        method:'post',
+        data:{
+            query: `query {
+                fetchSubjects {
+                    id,
+                    name,
+                    shorterName
+                }
+            }`
+        },
+        headers:{
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+    }).then((response) =>{
+        return response.data.data;
+    })
+}
+
+export function getClassrooms(){
+    return axios({url:"https://upz-graphql.herokuapp.com/graphql",
+    
+        method:'post',
+        data:{
+            query: `query {
+                fetchClassrooms {
                     id,
                     name,
                 }

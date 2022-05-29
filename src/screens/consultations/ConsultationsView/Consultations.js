@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { getConsultations, getTeachers, getTitles } from "../../../util/api.js"
+import { getClassrooms, getConsultations, getPlans, getSubjects, getTeachers, getTitles } from "../../../util/api.js"
 import PlanWeekView from '../../plan/PlanWeekView/PlanWeekView'
 import "./Consultations.css"
 
@@ -27,6 +27,9 @@ export default function Conultations(props) {
     const [consultations, setConsultations] = useState({})
     const [teachers, setTeachers] = useState([])
     const [titles, setTitles] = useState({})
+    const [plans, setPlans] = useState({})
+    const [subjects, setSubjects] = useState({})
+    const [rooms, setRooms] = useState({})
     const [currentProf, setCurrentProf] = useState(0)
     const [events, setEvents] = useState([])
 
@@ -42,7 +45,18 @@ export default function Conultations(props) {
                 tempData[cons.teacherId][cons.id].len = 1;
             }
             setConsultations(tempData);
-            console.log("consultations", tempData)
+            // console.log("consultations", tempData)
+        });
+        getPlans().then(result => {
+            let tempData = {}
+            for(let plan of result.fetchPlans)
+                tempData[plan.teacherId] = {}
+            
+            for(let plan of result.fetchPlans) {
+                tempData[plan.teacherId][plan.id] = plan
+            }
+            setPlans(tempData)
+            console.log("plans", tempData)
         });
         getTeachers().then(result => {
             let tempData = {}
@@ -52,7 +66,7 @@ export default function Conultations(props) {
             for(let t of result.fetchTeachers) 
                 tempData[t.id] = t
             
-            console.log("teachers", tempData)
+            // console.log("teachers", tempData)
             setTeachers(tempData);
         });
         getTitles().then(result => {
@@ -62,6 +76,21 @@ export default function Conultations(props) {
             
             setTitles(tempData);
         });
+        getSubjects().then(result => {
+            let tempData = {};
+            for(let s of result.fetchSubjects) 
+                tempData[s.id] = s;
+            
+            setSubjects(tempData);
+        });
+        getClassrooms().then(result => {
+            let tempData = {};
+            for(let c of result.fetchClassrooms) 
+                tempData[c.id] = c.name;
+            
+            setRooms(tempData);
+        });
+        
     }, [])
 
     const switchProf = (e) => {
@@ -71,17 +100,23 @@ export default function Conultations(props) {
         prepareData(profId, profName);
     }
 
-    const prepareData = (id, name) => {
-        const cons_arr = structuredClone(Object.values(consultations[id])) //clone so that descriptions don't keep adding on every time we switch back to a teacher
+    const prepareConsultationsData = (id, name) => {
+        var cons_arr = []
+        try { // check if professor actually has any consultations
+            cons_arr = structuredClone(Object.values(consultations[id])) //clone so that descriptions don't keep adding on every time we switch back to a teacher
+        } catch (error) {
+            console.log("Chosen prof has no consultations")
+            return
+        }
 
         let merged_arr = cons_arr.reduce((prev, next) => {
             var latest = prev[prev.length - 1];
             if (latest 
-                && latest.typed == next.typed 
-                && latest.day == next.day
+                && latest.typed === next.typed 
+                && latest.day === next.day
                 && next.hour - latest.hour <= latest.len) {
                     latest.len += 1;
-                    if (latest.description != next.description)
+                    if (latest.description !== next.description)
                         latest.description += " " + next.description
             } else 
                 prev.push(next);
@@ -101,7 +136,44 @@ export default function Conultations(props) {
             }
             return event;
         })
-        setEvents(evs)
+
+        return evs;
+    }
+
+    const preparePlanData = (id, name) => {
+        var plan_arr = []
+        try { // check if professor actually has any consultations
+            plan_arr = structuredClone(Object.values(plans[id])).filter(plan => plan.day <= 5) //TODO: once planview is adjusted for 7 days this can go
+        } catch (error) {
+            console.log("Chosen prof has no plans")
+            return
+        }
+
+        var evs = plan_arr.map((plan) => {
+
+            let title = titles[teachers[id].titleId] || "";
+            console.log("plan", plan)
+            var event = {
+                name: subjects[plan.subjectId].shorterName,
+                roomNr: rooms[plan.classroomId],
+                dayNumber: plan.day.toString(),
+                from: hours[plan.hour-1][0],
+                to: hours[plan.hour + plan.amount - 2][1],
+                color: '#D6D311',
+                person: title + " " + name,
+            }
+            return event;
+        })
+
+        return evs;
+    }
+
+    const prepareData = (id, name) => {
+        const cons_evs = prepareConsultationsData(id, name)
+        const plan_evs = preparePlanData(id, name)
+
+        setEvents([...cons_evs, ...plan_evs])
+        // setEvents(cons_evs)
     }
 
     return(
