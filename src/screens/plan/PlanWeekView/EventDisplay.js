@@ -65,7 +65,7 @@ export default function EventDisplay(props) {
             
             <div className='eventDisplayTitleRow'>
                 <div className='eventDisplayRoomNr'>{props.roomNr}</div>
-                <div className='eventDisplayName'>{props.name}</div>
+                <div className='eventDisplayName'>{clicked ? (props.fullName ?? props.name) : props.name}</div>
             </div>
             {props.person &&
             <div className='eventDisplayPersonNameRow'>
