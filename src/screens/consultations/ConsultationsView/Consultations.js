@@ -152,9 +152,9 @@ export default function Conultations(props) {
         var evs = plan_arr.map((plan) => {
 
             let title = titles[teachers[id].titleId] || "";
-            console.log("plan", plan)
             var event = {
                 name: subjects[plan.subjectId].shorterName,
+                fullName: subjects[plan.subjectId].name,
                 roomNr: rooms[plan.classroomId],
                 dayNumber: plan.day.toString(),
                 from: hours[plan.hour-1][0],
@@ -172,8 +172,11 @@ export default function Conultations(props) {
         const cons_evs = prepareConsultationsData(id, name)
         const plan_evs = preparePlanData(id, name)
 
-        setEvents([...cons_evs, ...plan_evs])
-        // setEvents(cons_evs)
+        var all_evs = []
+        all_evs = all_evs.concat(cons_evs ?? [])
+        all_evs = all_evs.concat(plan_evs ?? [])
+
+        setEvents(all_evs)
     }
 
     return(
