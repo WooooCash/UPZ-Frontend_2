@@ -201,8 +201,8 @@ export default function Conultations(props) {
             </div>
 
             <div className="schedule-view">
-                {!events && (<p>Nothing to see here B)</p>)}
-                {events && (<PlanWeekView events={events}/>)}
+                {events.length == 0 && (<p>Nothing to see here B)</p>)}
+                {events.length != 0 && (<PlanWeekView events={events}/>)}
             </div>
         </div>
     )
