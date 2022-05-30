@@ -54,7 +54,7 @@ export function getTeachers(){
         method:'post',
         data:{
             query: `query {
-                fetchTeachers {
+                fetchTeachersWithTutorshipsAndPlans {
                     id,
                     name,
                     lastName,

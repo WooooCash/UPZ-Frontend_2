@@ -61,9 +61,9 @@ export default function Conultations(props) {
         getTeachers().then(result => {
             let tempData = {}
  
-            for (let t of result.fetchTeachers)
+            for (let t of result.fetchTeachersWithTutorshipsAndPlans)
                 t.fullName = t.name ? t.name + " " + t.lastName : t.lastName;
-            for(let t of result.fetchTeachers) 
+            for(let t of result.fetchTeachersWithTutorshipsAndPlans) 
                 tempData[t.id] = t
             
             // console.log("teachers", tempData)
@@ -201,8 +201,8 @@ export default function Conultations(props) {
             </div>
 
             <div className="schedule-view">
-                {!consultations[currentProf] && (<p>Nothing to see here B)</p>)}
-                {consultations[currentProf] && (<PlanWeekView events={events}/>)}
+                {!events && (<p>Nothing to see here B)</p>)}
+                {events && (<PlanWeekView events={events}/>)}
             </div>
         </div>
     )
