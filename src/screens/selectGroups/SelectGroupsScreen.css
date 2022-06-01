@@ -76,3 +76,28 @@
     background-color: var(--light-grey);
     border-top: 1px solid var(--grey);
 }
+
+.category {
+    display: flex;
+}
+
+.group {
+    margin: 5px;
+    padding: 10px 30px;
+
+    text-align: center;
+
+    background-color: var(--secondary-light);
+    color: var(--light-grey);
+    border-radius: 20px;
+
+    cursor: pointer;
+    user-select: none;
+
+    transition: transform;
+    transition-duration: 0.3;
+}
+
+.group:hover {
+    transform: scale(1.05);
+}
