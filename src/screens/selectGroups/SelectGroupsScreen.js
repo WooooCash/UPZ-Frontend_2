@@ -2,24 +2,42 @@ import './SelectGroupsScreen.css';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
+import { getGroups } from '../../util/api';
 
-const groupData = {
-    'cw': ['cw1', 'cw2', 'cw3', 'cw4'],
-    'ps': ['ps1', 'ps2', 'ps3', 'ps4', 'ps5', 'ps6', 'ps7', 'ps8'],
-    'lab': ['lab1', 'lab2'],
+const categoryNames = {
+    'P': "Projekt Zespołowy",
+    'Ps':"Pracownia Specjalistyczna",
+    'W': "Wykład",
+    'S': "Seminarium Dyplomowe",
+    'J': "Język"
 }
 
 export default function SelectGroupsScreen(props) {
 
     const history = useHistory();
 
-    const [groups, setGroups] = useState(groupData);
+    const [groups, setGroups] = useState({});
     const [selected, setSelected] = useState([])
+    const [loading, setLoading] = useState(true)
+
+
+    useEffect(() => {
+        if (props.location.state) {
+            getGroups(props.location.state).then(result => {
+                setGroups(result.fetchGroups.attributes)
+                // console.log("consultations", tempData)
+                console.log("fetchGroups", result.fetchGroups.attributes)
+                setLoading(false)
+            });
+        } else 
+            setLoading(false)
+    }, [])
 
     function moveToSelected(key, group) {
+        console.log(props.location.state)
         let obj = [key, group]
         setSelected([...selected, obj])
         
@@ -36,6 +54,7 @@ export default function SelectGroupsScreen(props) {
         setSelected(selected.filter(([k, g]) => g !== group))
     }
 
+    
     return (
         <div className="selectGroupsScreenMainContainer">
             <div className="selectGroupsScreenNavBar">
@@ -47,10 +66,9 @@ export default function SelectGroupsScreen(props) {
                 </div>
             </div>
             <div className="selectGroupsScreenContent">
-                Lista grup
-                {Object.entries(groups).map(([key, value]) => (
+                {groups && !loading && Object.entries(groups).map(([key, value]) => (
                     <div>
-                        <h4>{key}</h4>
+                        <h4>{categoryNames[key]}</h4>
                         <div className="category">
                             {value && value.map(group => (
                                 <div className="group" onClick={() => moveToSelected(key, group)}>
@@ -60,6 +78,14 @@ export default function SelectGroupsScreen(props) {
                         </div>
                     </div>
                 ))}
+                {Object.keys(groups).length == 0 && !loading && (
+                    <div className="noGroupsContainer">
+                        <h3>Musisz przejść dokonać wyboru semestru zanim możesz wybierać grupy.</h3>
+                        <div className="noGroupsButton" onClick={() => history.push('/')}>
+                            <FontAwesomeIcon icon={faArrowLeft} /> Przejdź do wyboru semestru
+                        </div>
+                    </div>
+                )}
             </div>
             <div className="selectGroupsScreenSummaryView">
                 <h4>Podsumowanie</h4>

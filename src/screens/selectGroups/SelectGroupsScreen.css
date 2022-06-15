@@ -101,3 +101,35 @@
 .group:hover {
     transform: scale(1.05);
 }
+
+.noGroupsContainer {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    text-align: center;
+
+    padding: 30px 20px;
+    margin: 50px auto;
+
+    background-color: var(--light-grey);
+    border: 2px solid red;
+    width: 25%;
+}
+
+.noGroupsButton {
+    cursor: pointer;
+    border: 1px solid var(--primary-light);
+    padding: 15px 10px;
+    border-radius: 20px;
+    color: var(--primary-light);
+    user-select: none;
+
+    transition: background-color, color;
+    transition-duration: 150ms;
+}
+
+.noGroupsButton:hover {
+    background-color: var(--primary-light);
+    color: var(--light-grey);
+}

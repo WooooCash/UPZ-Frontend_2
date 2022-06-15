@@ -23,6 +23,7 @@ export default function AddPlanGuide(props) {
     const [selectedMajor, setSelectedMajor] = useState('');
     const [selectedDegree, setSelectedDegree] = useState('');
     const [selectedSpeciality, setSelectedSpeciality] = useState('');
+    
 
 
     const typesOfStudy = [
@@ -264,6 +265,13 @@ export default function AddPlanGuide(props) {
     }
 
     function selectSemester(semester) {
+        let config = {
+            "typeOfStudies": selectedTypeOfStudy,
+            "major": selectedMajor,
+            "degree": selectedDegree,
+            "specialityId": selectedSpeciality,
+            "semester": semester,
+        }
         console.log({
             "typeOfStudies": selectedTypeOfStudy,
             "major": selectedMajor,
@@ -272,7 +280,7 @@ export default function AddPlanGuide(props) {
             "semester": semester,
         });
         //todo: zapisywanie do LocalStorage
-        history.push("/selectGroups");
+        history.push("/selectGroups", config);
     }
 
     function goBackAScreen() {
