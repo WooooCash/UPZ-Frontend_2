@@ -208,6 +208,7 @@ export function getPlansForGroups(args){
 						classroomId,
 						subjectId,
 						subjectType,
+						group,
 						teacherId
                 }
             }`

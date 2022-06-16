@@ -45,7 +45,6 @@ export default function Conultations(props) {
                 tempData[cons.teacherId][cons.id].len = 1;
             }
             setConsultations(tempData);
-            // console.log("consultations", tempData)
         });
         getPlans().then(result => {
             let tempData = {}
@@ -56,7 +55,6 @@ export default function Conultations(props) {
                 tempData[plan.teacherId][plan.id] = plan
             }
             setPlans(tempData)
-            console.log("plans", tempData)
         });
         getTeachers().then(result => {
             let tempData = {}
@@ -66,7 +64,6 @@ export default function Conultations(props) {
             for(let t of result.fetchTeachersWithTutorshipsAndPlans) 
                 tempData[t.id] = t
             
-            // console.log("teachers", tempData)
             setTeachers(tempData);
         });
         getTitles().then(result => {
