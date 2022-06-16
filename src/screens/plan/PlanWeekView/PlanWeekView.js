@@ -217,6 +217,6 @@ export default function PlanWeekView(props) {
 
         let styleAttrs = {id: id, gridColumnStart: event.column, gridColumnEnd: event.column + event.columnSpan};
         
-        return <EventDisplay key={event.id} styleAttrs={styleAttrs} color={event.color} fontColor={event.fontColor} top={eventStartOffset} height={eventHeight} roomNr={event.roomNr} name={event.name} fullName={event.fullName} person={event.person} parity={event.parity} other={event.other} />
+        return <EventDisplay key={event.id} styleAttrs={styleAttrs} color={event.color} fontColor={event.fontColor} top={eventStartOffset} height={eventHeight} roomNr={event.roomNr} name={event.name} fullName={event.fullName} person={event.person} group={event.group} parity={event.parity} other={event.other} />
     }
 }
