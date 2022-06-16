@@ -102,6 +102,27 @@
     transform: scale(1.05);
 }
 
+
+.selectGroupsCreatePlan {
+	float: right;
+	margin: 30px 50px;
+	padding: 20px 10px;
+
+	border: 1px solid var(--primary-dark);
+	color: var(--primary-dark);
+
+	transition: background-color, color;
+	transition-duration: 150ms;
+
+	cursor: pointer;
+}
+
+.selectGroupsCreatePlan:hover {
+	background-color: var(--primary-dark);
+	color: var(--light-grey);
+}
+
+
 .noGroupsContainer {
     display: flex;
     flex-direction: column;

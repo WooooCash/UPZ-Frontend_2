@@ -103,7 +103,7 @@ export default function SelectGroupsScreen(props) {
                         </div>
                     ))}
                 </div>
-				<div onClick={() => createPlan()}>Create Plan</div>
+				<div className="selectGroupsCreatePlan" onClick={() => createPlan()}>Create Plan</div>
             </div>
         </div>
     );
