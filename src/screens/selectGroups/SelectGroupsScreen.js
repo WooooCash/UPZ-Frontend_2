@@ -25,9 +25,10 @@ export default function SelectGroupsScreen(props) {
 
 
     useEffect(() => {
+		console.log("location state", props.location.state)
         if (props.location.state) {
             getGroups(props.location.state).then(result => {
-                setGroups(result.fetchGroups.attributes)
+                setGroups(result.fetchGroups.attributes) 
                 // console.log("consultations", tempData)
                 console.log("fetchGroups", result.fetchGroups.attributes)
                 setLoading(false)
@@ -37,7 +38,6 @@ export default function SelectGroupsScreen(props) {
     }, [])
 
     function moveToSelected(key, group) {
-        console.log(props.location.state)
         let obj = [key, group]
         setSelected([...selected, obj])
         
@@ -53,6 +53,13 @@ export default function SelectGroupsScreen(props) {
 
         setSelected(selected.filter(([k, g]) => g !== group))
     }
+
+	function createPlan() {
+		let config = props.location.state;
+		config['groups'] = selected.map(([key, group], i) => `${!i ? "[" : ""}"${group}"${i == selected.length-1 ? "]" : ""}`);
+		console.log(config)
+		history.push('/planTest', config)
+	}
 
     
     return (
@@ -96,6 +103,7 @@ export default function SelectGroupsScreen(props) {
                         </div>
                     ))}
                 </div>
+				<div onClick={() => createPlan()}>Create Plan</div>
             </div>
         </div>
     );

@@ -170,8 +170,45 @@ export function getGroups(args){
         method:'post',
         data:{
             query: `query {
-                fetchGroups (typeOfStudies:"${args.typeOfStudies}", major:"${args.major}", degree:"${args.degree}", specialityId:${args.specialityId}, semester:${args.semester}){
-                    attributes
+                fetchGroups (typeOfStudies:"${args.typeOfStudies}", 
+					major:"${args.major}", 
+					degree:"${args.degree}", 
+					specialityId:${args.specialityId}, 
+					semester:${args.semester}){
+						attributes
+                }
+            }`
+        },
+        headers:{
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+    }).then((response) =>{
+        return response.data.data;
+    })
+}
+
+export function getPlansForGroups(args){
+    return axios({url:"https://upz-graphql.herokuapp.com/graphql",
+    
+        method:'post',
+        data:{
+            query: `query {
+                fetchPlanToExistingGroup (typeOfStudies:"${args.typeOfStudies}", 
+					major:"${args.major}", 
+					degree:"${args.degree}", 
+					specialityId:${args.specialityId}, 
+					semester:${args.semester},
+					groups:${args.groups}){
+						id,
+						teacherId,
+						day,
+						hour,
+						amount,
+						classroomId,
+						subjectId,
+						subjectType,
+						teacherId
                 }
             }`
         },
