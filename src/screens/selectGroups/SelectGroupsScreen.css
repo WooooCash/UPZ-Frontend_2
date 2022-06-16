@@ -81,14 +81,12 @@
     display: flex;
 }
 
-.group {
+.group, .groupSelected{
     margin: 5px;
     padding: 10px 30px;
 
     text-align: center;
 
-    background-color: var(--secondary-light);
-    color: var(--light-grey);
     border-radius: 20px;
 
     cursor: pointer;
@@ -98,8 +96,20 @@
     transition-duration: 0.3;
 }
 
-.group:hover {
+.group:hover, .groupSelected:hover {
     transform: scale(1.05);
+}
+
+.group {
+	background-color: #fff;
+	color: var(--secondary-light);
+	border: 1px solid var(--secondary-light);
+}
+
+.groupSelected {
+    background-color: var(--secondary-light);
+    color: var(--light-grey);
+	border: none;
 }
 
 
