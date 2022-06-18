@@ -20,7 +20,9 @@ export default function SelectGroupsScreen(props) {
     const history = useHistory();
 
     const [groups, setGroups] = useState({});
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
+    const [planName, setPlanName] = useState("");
+    const [isPlanNameWarningVisible, setIsPlanNameWarningVisible] = useState(false);
 
 
 	useEffect(() => {
@@ -59,6 +61,12 @@ export default function SelectGroupsScreen(props) {
 
 
 	function createPlan() {
+        console.log("planName: " + planName);
+        if (planName.trim() == '') {
+            setIsPlanNameWarningVisible(true);
+            return;
+        }
+
 		let config = props.location.state;
 
 		let selected = getSelected()
@@ -72,7 +80,7 @@ export default function SelectGroupsScreen(props) {
         else savedPlans = JSON.parse(savedPlans);
         console.log(savedPlans);
         savedPlans.push({
-            "name": "test", //todo: zapisanie nazwy dodanej przez uytkownika
+            "name": planName, //todo: zapisanie nazwy dodanej przez uytkownika
             ...config,
         })
         window.localStorage.setItem("savedPlans", JSON.stringify(savedPlans));
@@ -116,6 +124,12 @@ export default function SelectGroupsScreen(props) {
             </div>
             <div className="selectGroupsScreenSummaryView">
                 <h4>Podsumowanie</h4>
+                <input type="text" placeholder="Podaj nazwę planu" value={planName} onChange={(event) => {
+                    let newPlanName = event.target.value;
+                    if (newPlanName.trim() == '') setIsPlanNameWarningVisible(true);
+                    setPlanName(event.target.value);
+                    }}/>
+                <label hidden={!isPlanNameWarningVisible} style={{color: "red"}}>Pole musi być wypełnione</label>
                 <div className="category">
 					{getSelected().map((g) => (
                         <div className="groupSelected" onClick={() => toggleSelected(g.key, g.group)}>
