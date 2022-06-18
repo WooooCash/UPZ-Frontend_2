@@ -72,7 +72,6 @@ export default function SelectGroupsScreen(props) {
 		let selected = getSelected()
         let formattedSelected = selected.map((entry, i) => `${!i ? "[" : ""}"${entry.group.group}"${i == selected.length-1 ? "]" : ""}`)
 		config['groups'] = formattedSelected;
-        console.log(formattedSelected);
 
         // zapisanie planu do LocalStorage
         var savedPlans = window.localStorage.getItem("savedPlans");
@@ -84,6 +83,7 @@ export default function SelectGroupsScreen(props) {
             ...config,
         })
         window.localStorage.setItem("savedPlans", JSON.stringify(savedPlans));
+		config['planName'] = planName;
 
         // przekierowanie na stronę z planem zajęć
 		history.push('/planTest', config)
@@ -123,8 +123,8 @@ export default function SelectGroupsScreen(props) {
                 )}
             </div>
             <div className="selectGroupsScreenSummaryView">
-                <h4>Podsumowanie</h4>
-                <input type="text" placeholder="Podaj nazwę planu" value={planName} onChange={(event) => {
+				<h4 style={{display: "inline"}}>Podsumowanie</h4>
+                <input class="selectGroupsPlanNameInput" type="text" placeholder="Podaj nazwę planu" value={planName} onChange={(event) => {
                     let newPlanName = event.target.value;
                     if (newPlanName.trim() == '') setIsPlanNameWarningVisible(true);
                     setPlanName(event.target.value);

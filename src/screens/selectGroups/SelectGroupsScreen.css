@@ -164,3 +164,17 @@
     background-color: var(--primary-light);
     color: var(--light-grey);
 }
+
+.selectGroupsPlanNameInput {
+	display: inline;
+
+	margin-left: 20px;
+	height: 2.5rem;
+	padding: 0 5px;
+	border-left: 0;
+	border-top: 0;
+	border-right: 0;
+	border-bottom: 1px solid #999;
+	outline: none;
+	background: transparent;
+}

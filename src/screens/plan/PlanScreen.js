@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import NavBar from "./../components/NavBar/NavBar"
 import { useHistory } from 'react-router-dom';
 import {
 	getPlansForGroups,
@@ -146,9 +147,16 @@ export default function PlanScreen(props) {
 		setPrepared(true);
 	};
 
+	var planName = "";
+	if (props.location.state && props.location.state.planName)
+		planName = `- ${props.location.state.planName}`;
+
 	return (
 		<div className="planScreenMainContainer">
-			<div className="planScreenPlanName">Plan zajęć</div>
+			<NavBar />
+			<div className="planScreenPlanName">
+				Plan zajęć {planName}
+			</div>
 			{!loading && events.length == 0 && <p>Nothing to see here B)</p>}
 			{!loading && events.length != 0 && <PlanWeekView events={events} />}
 		</div>
