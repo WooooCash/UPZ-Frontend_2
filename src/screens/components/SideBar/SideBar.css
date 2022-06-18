@@ -81,6 +81,12 @@
 }
 
 .planListEntry {
+
+    display: flex;
+
+    align-content: center;
+    align-items: center;
+
     width: 100%;
     box-sizing: border-box;
     
@@ -106,6 +112,32 @@
     background-color: var(--secondary-light);
     border-color: var(--secondary-light);
 }
+
+.planListEntryDeleteButton {
+    width: 20px;
+    height: 20px;
+
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+
+    border: 1px solid red;
+    color: red;
+    border-radius: 4px;
+
+    background-color: transparent;
+
+    cursor: pointer;
+
+    transition-duration: 70ms;
+    transition-property: background-color, color;
+}
+
+.planListEntryDeleteButton:hover {
+    background-color: red;
+    color: white;
+}
+
 @media only screen and (max-width: 680px) {
     .sideBarExpanded{
         position: absolute;
