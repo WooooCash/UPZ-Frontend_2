@@ -62,8 +62,22 @@ export default function SelectGroupsScreen(props) {
 		let config = props.location.state;
 
 		let selected = getSelected()
-		config['groups'] = selected.map((entry, i) => `${!i ? "[" : ""}"${entry.group.group}"${i == selected.length-1 ? "]" : ""}`);
+        let formattedSelected = selected.map((entry, i) => `${!i ? "[" : ""}"${entry.group.group}"${i == selected.length-1 ? "]" : ""}`)
+		config['groups'] = formattedSelected;
+        console.log(formattedSelected);
 
+        // zapisanie planu do LocalStorage
+        var savedPlans = window.localStorage.getItem("savedPlans");
+        if (savedPlans == null) savedPlans = [];
+        else savedPlans = JSON.parse(savedPlans);
+        console.log(savedPlans);
+        savedPlans.push({
+            "name": "test", //todo: zapisanie nazwy dodanej przez uytkownika
+            ...config,
+        })
+        window.localStorage.setItem("savedPlans", JSON.stringify(savedPlans));
+
+        // przekierowanie na stronę z planem zajęć
 		history.push('/planTest', config)
 	}
 

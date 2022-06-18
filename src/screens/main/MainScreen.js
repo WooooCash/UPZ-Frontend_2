@@ -6,8 +6,12 @@ import NavBar from "./../components/NavBar/NavBar"
 import SideBar from "./../components/SideBar/SideBar";
 import Tree from "./TreeView/Tree";
 import AddPlanGuide from "../components/AddPlanGuide/AddPlanGuide";
+import { useHistory } from "react-router-dom";
 
 export default function MainScreen(props) {
+
+    const history = useHistory();
+
     return (
         <div className="column">
             <NavBar />

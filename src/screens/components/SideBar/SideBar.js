@@ -3,10 +3,25 @@ import React, { useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { useHistory } from "react-router-dom";
 
 export default function SideBar(props) {
 
     const [sideBarCollapsed, setSideBarCollapsed] = useState(true);
+    const history = useHistory();
+
+    var savedPlans = window.localStorage.getItem("savedPlans");
+    if (savedPlans == null) savedPlans = [];
+    else savedPlans = JSON.parse(savedPlans);
+    console.log("savedPlans");
+    console.log(savedPlans);
+
+    var plansComponents = [];
+    for (let plan of savedPlans) {
+        plansComponents.push(<div className="planListEntry" onClick={() => history.push('/planTest', plan)}>
+            {plan["name"]}
+        </div>);
+    }
 
     return (
         <div className={"sideBar" + (sideBarCollapsed ? "" : " sideBarExpanded")}>
@@ -28,15 +43,7 @@ export default function SideBar(props) {
             }
             {!sideBarCollapsed &&
                 <div className="sideBarContent">
-                    <div className="planListEntry">
-                        Plan zajęć nr.2 - z konsultacjami nauczycieli
-                    </div>
-                    <div className="planListEntry">
-                        Plan zajęć (semestr 3) bez grup Ps
-                    </div>
-                    <div className="planListEntry">
-                        Main plan zajęć
-                    </div>
+                    {plansComponents}
                 </div>
             }
         </div>

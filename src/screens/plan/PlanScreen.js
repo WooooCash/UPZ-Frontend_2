@@ -59,6 +59,7 @@ export default function PlanScreen(props) {
 
 	useEffect(() => {
 		if (props.location.state) {
+			console.log(props.location.state)
 			let counter = 0;
 
 			getTeachers().then((result) => {
