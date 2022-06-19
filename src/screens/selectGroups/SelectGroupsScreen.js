@@ -72,6 +72,7 @@ export default function SelectGroupsScreen(props) {
 		let selected = getSelected()
         let formattedSelected = selected.map((entry, i) => `${!i ? "[" : ""}"${entry.group.group}"${i == selected.length-1 ? "]" : ""}`)
 		config['groups'] = formattedSelected;
+        config['planName'] = planName;
 
         // zapisanie planu do LocalStorage
         var savedPlans = window.localStorage.getItem("savedPlans");
@@ -83,7 +84,7 @@ export default function SelectGroupsScreen(props) {
             ...config,
         })
         window.localStorage.setItem("savedPlans", JSON.stringify(savedPlans));
-		config['planName'] = planName;
+		
 
         // przekierowanie na stronę z planem zajęć
 		history.push('/planTest', config)
