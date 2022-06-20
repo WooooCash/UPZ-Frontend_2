@@ -13,7 +13,7 @@
 }
 @media screen and (max-width: 700px) {
     .sideBar {
-        display: none
+        width: 30px;
     }
 }
 .sideBarExpanded {
